@@ -1,84 +1,153 @@
 <!doctype html>
 <html lang="ar" dir="rtl" class="h-full">
- <head>
+ <head><script src="/_sdk/telemetry_sdk.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Majed Abu Ras - CV</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&amp;family=Playfair+Display:wght@400;600;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&amp;family=Playfair+Display:wght@400;700&amp;display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    .app-wrapper { height: 100%; overflow-y: auto; overflow-x: hidden; }
+    * { font-family: 'Tajawal', sans-serif; }
+    html[lang="en"] * { font-family: 'Playfair Display', serif; }
+    html[lang="en"] p, html[lang="en"] td, html[lang="en"] li, html[lang="en"] span { font-family: 'Tajawal', sans-serif; }
+    body { background: linear-gradient(135deg, #f5f7fa 0%, #f0ebe6 100%); }
     .skill-bar { transition: width 1.5s ease; }
-    .fade-in { animation: fadeIn 0.6s ease forwards; opacity: 0; }
-    @keyframes fadeIn { to { opacity: 1; } }
+    .section { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
     .nav-overlay { transition: opacity 0.3s, visibility 0.3s; }
-    .nav-panel { transition: transform 0.3s ease; }
-    .section-card { transition: transform 0.3s, box-shadow 0.3s; }
-    .section-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .nav-panel { transition: transform 0.3s; box-shadow: -4px 0 15px rgba(0,0,0,0.1); }
     .lang-btn { transition: all 0.2s; }
     .lang-btn:hover { transform: scale(1.05); }
-    .lang-btn.active { font-weight: 700; }
-    .table-row:nth-child(even) { background: rgba(99,162,155,0.05); }
-    .table-row:hover { background: rgba(99,162,155,0.1); }
+    .training-table tr:nth-child(even) { background: rgba(99,165,171,0.05); }
+    .training-table tr:hover { background: rgba(99,165,171,0.12); transform: scale(1.01); }
+    header { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(99,165,171,0.15); }
   </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#63A5AB',
+            secondary: '#F7F3EE',
+            accent: '#D4A574',
+            dark: '#2C3E50',
+            surface: '#FFFFFF'
+          }
+        }
+      }
+    }
+  </script>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full">
-  <div class="app-wrapper w-full" style="background: linear-gradient(135deg, #f8fffe 0%, #f0f7f5 50%, #faf8f5 100%); font-family: 'Tajawal', sans-serif;" id="app"><!-- Header -->
-   <header class="sticky top-0 z-50 backdrop-blur-md" style="background: rgba(255,255,255,0.92); border-bottom: 1px solid rgba(99,162,155,0.15);">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between"><button id="menuBtn" class="p-2 rounded-lg hover:bg-gray-100 transition"> <i data-lucide="menu" style="width:24px;height:24px;color:#2d6a5e;"></i> </button>
-     <h1 id="headerName" class="text-lg font-bold" style="color:#2d6a5e;"></h1>
-     <div id="langSelector" class="flex gap-1 flex-wrap justify-end"></div>
+ <body class="h-full text-dark overflow-auto">
+  <!-- Navigation Overlay -->
+  <div id="navOverlay" class="nav-overlay fixed inset-0 bg-black/40 z-50 invisible opacity-0" onclick="closeNav()">
+   <div id="navPanel" class="nav-panel bg-white w-72 h-full shadow-2xl p-6 overflow-y-auto transform translate-x-full rtl:-translate-x-full" onclick="event.stopPropagation()">
+    <div class="flex justify-between items-center mb-8">
+     <h3 class="text-lg font-bold text-primary" id="navTitle">القائمة</h3><button onclick="closeNav()" class="p-1 rounded hover:bg-gray-100"><i data-lucide="x" class="w-5 h-5"></i></button>
     </div>
-   </header><!-- Nav Overlay -->
-   <div id="navOverlay" class="nav-overlay fixed inset-0 z-[60] invisible opacity-0" style="background:rgba(0,0,0,0.3);">
-    <div id="navPanel" class="nav-panel fixed top-0 h-full w-72 z-[61] overflow-y-auto" style="background:#fff; box-shadow: 4px 0 20px rgba(0,0,0,0.1);">
-     <div class="p-4 flex justify-between items-center" style="border-bottom:1px solid #e8f0ee;"><span id="navTitle" class="font-bold text-lg" style="color:#2d6a5e;"></span> <button id="closeNav" class="p-2 rounded-lg hover:bg-gray-100"><i data-lucide="x" style="width:20px;height:20px;color:#2d6a5e;"></i></button>
-     </div>
-     <nav id="navLinks" class="p-4 flex flex-col gap-2"></nav>
+    <nav id="navLinks" class="space-y-2"></nav>
+    <div class="mt-8 pt-6 border-t">
+     <p class="text-sm text-gray-500 mb-3" id="langLabel">اللغة</p>
+     <div id="langButtons" class="grid grid-cols-2 gap-2"></div>
     </div>
-   </div><!-- Main Content -->
-   <main class="max-w-5xl mx-auto px-4 py-8" id="mainContent"></main><!-- Footer -->
-   <footer class="text-center py-6 text-sm" style="color:#7a9e98;"><span id="footerText"></span>
-   </footer>
-  </div>
+   </div>
+  </div><!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+   <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+    <button onclick="openNav()" class="p-2 rounded-lg hover:bg-gray-100 transition"><i data-lucide="menu" class="w-6 h-6 text-primary"></i></button>
+    <h1 class="text-lg font-bold text-primary" id="headerName">ماجد أبوراس</h1>
+    <div class="w-10"></div>
+   </div>
+  </header><!-- Hero -->
+  <section id="hero" class="section bg-gradient-to-br from-primary/10 via-white to-accent/10 py-16 px-4">
+   <div class="max-w-4xl mx-auto text-center">
+    <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+     م
+    </div>
+    <h1 class="text-3xl md:text-4xl font-800 text-dark mb-3" id="heroName">ماجد علي سعيد أبوراس</h1>
+    <p class="text-primary text-lg font-medium mb-4" id="heroTitle">متخصص في القيادة التعليمية والتخطيط الاستراتيجي</p>
+    <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600 mt-6">
+     <span class="flex items-center gap-1">📍 <span id="heroLoc">الرياض - حي المحمدية</span></span> <span>📧 masa760u@gmail.com</span> <span>📞 0554441449</span>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3 mt-4">
+     <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">🇸🇦 <span id="heroCountry">المملكة العربية السعودية</span></span> <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">🟢 <span id="heroExp">خبرة +18 سنة</span></span> <span class="bg-dark/10 text-dark px-3 py-1 rounded-full text-sm">🎓 <span id="heroDeg">ماجستير في التعليم</span></span>
+    </div>
+   </div>
+  </section><!-- Objective -->
+  <section id="objective" class="section max-w-4xl mx-auto px-4 py-12">
+   <h2 class="text-2xl font-bold text-primary mb-6 border-b-2 border-primary/20 pb-2" id="objHeading">الهدف الوظيفي</h2>
+   <div class="bg-gradient-to-br from-white to-primary/5 border border-primary/10 p-7 rounded-lg shadow-md">
+    <p class="text-gray-800 leading-relaxed font-medium text-base" id="objText">أتطلع إلى توظيف خبرتي التنفيذية والتربوية ومؤهلي في القيادة التعليمية لدعم القرار الاستراتيجي وتحقيق التكامل المؤسسي بين التخطيط الاستراتيجي والتنفيذ الميداني، بما يحقق مستهدفات رؤية المملكة 2030 من خلال العمل في وكالة التعليم العام</p>
+   </div>
+  </section><!-- Professional Certifications -->
+  <section id="certifications" class="section max-w-4xl mx-auto px-4 py-12">
+   <h2 class="text-2xl font-bold text-primary mb-6 border-b-2 border-primary/20 pb-2" id="certHeading">الشهادات المهنية</h2>
+   <div class="grid md:grid-cols-2 gap-4" id="certGrid"></div>
+  </section><!-- Education -->
+  <section id="education" class="section max-w-4xl mx-auto px-4 py-12">
+   <h2 class="text-2xl font-bold text-primary mb-6 border-b-2 border-primary/20 pb-2" id="eduHeading">الشهادات العلمية</h2>
+   <div id="eduContent" class="space-y-6"></div>
+  </section><!-- Experience -->
+  <section id="experience" class="section max-w-4xl mx-auto px-4 py-12">
+   <h2 class="text-2xl font-bold text-primary mb-6 border-b-2 border-primary/20 pb-2" id="expHeading">الخبرات العملية</h2>
+   <div id="expContent" class="space-y-6"></div>
+  </section><!-- Skills -->
+  <section id="skills" class="section max-w-4xl mx-auto px-4 py-12">
+   <h2 class="text-2xl font-bold text-primary mb-6 border-b-2 border-primary/20 pb-2" id="skillsHeading">المهارات</h2>
+   <div id="skillsContent" class="space-y-4"></div>
+  </section><!-- Training -->
+  <section id="training" class="section max-w-4xl mx-auto px-4 py-12">
+   <h2 class="text-2xl font-bold text-primary mb-6 border-b-2 border-primary/20 pb-2" id="trainingHeading">البرامج التدريبية</h2>
+   <div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+    <table class="training-table w-full text-sm">
+     <thead class="bg-primary/10">
+      <tr id="trainingHeader"></tr>
+     </thead>
+     <tbody id="trainingBody"></tbody>
+    </table>
+   </div>
+  </section><!-- Footer -->
+  <footer class="bg-dark text-white/80 text-center py-6 text-sm">
+   <p>© 2025 Majed Ali Saeed Abu Ras</p>
+  </footer>
   <script>
 const translations = {
   ar: {
-    dir: 'rtl', lang: 'ar', fontFamily: "'Tajawal', sans-serif",
-    name: 'ماجد علي سعيد أبوراس',
-    title: 'متخصص في القيادة التعليمية والتخطيط الاستراتيجي',
-    nav: 'القائمة',
-    sections: ['الملف الشخصي','الهدف الوظيفي','الشهادات العلمية','الشهادات المهنية','الخبرات العملية','البرامج التدريبية','المهارات','التواصل'],
-    profile: {
-      location: 'الرياض - حي المحمدية',
-      email: 'masa760u@gmail.com',
-      phone: '0554441449',
-      country: 'المملكة العربية السعودية',
-      experience: 'خبرة +18 سنة',
-      education: 'ماجستير في التعليم'
-    },
-    objective: 'أتطلع إلى توظيف خبرتي التنفيذية والتربوية ومؤهلي في القيادة التعليمية لدعم القرار الاستراتيجي وتحقيق التكامل المؤسسي بين التخطيط الاستراتيجي والتنفيذ الميداني، بما يحقق مستهدفات رؤية المملكة 2030 من خلال العمل في وكالة التعليم العام.',
-    degrees: [
-      { title: 'ماجستير في التعليم (2017)', institution: 'جامعة لويس - شيكاغو، الولايات المتحدة', note: 'برنامج الملك عبدالله للابتعاث', topics: ['سياسات التعليم','إعداد البرامج التعليمية','تحليل المناهج','معايير التقييم','إدارة المنظمات التعليمية','قيادة الأعمال'] },
-      { title: 'بكالوريوس تعليم اللغة الإنجليزية (2007)', institution: 'جامعة الملك سعود – الرياض', note: '', topics: ['تعليم اللغة الإنجليزية كلغة ثانية','الإعداد التربوي','القيادة التعليمية','سياسات التعليم'] }
-    ],
-    certifications: [
+    dir: 'rtl', lang: 'ar',
+    navTitle: 'القائمة', langLabel: 'اللغة',
+    headerName: 'ماجد أبوراس',
+    heroName: 'ماجد علي أبوراس',
+    heroTitle: 'متخصص في القيادة التعليمية والتخطيط الاستراتيجي',
+    heroLoc: 'الرياض - حي المحمدية',
+    heroCountry: 'المملكة العربية السعودية',
+    heroExp: 'خبرة +18 سنة', heroDeg: 'ماجستير في التعليم',
+    objHeading: 'الهدف الوظيفي',
+    objText: 'أتطلع إلى توظيف خبرتي التنفيذية والتربوية ومؤهلي في القيادة التعليمية لدعم القرار الاستراتيجي وتحقيق التكامل المؤسسي بين التخطيط الاستراتيجي والتنفيذ الميداني، بما يحقق مستهدفات رؤية المملكة 2030 من خلال العمل في وكالة التعليم العام',
+    certHeading: 'الشهادات المهنية',
+    certs: [
       { name: 'برنامج الجودة والتقويم والاعتماد', org: 'هيئة تقويم التعليم والتدريب' },
       { name: 'مدقق داخلي ISO 9001', org: 'المؤسسة العامة للتدريب التقني والمهني' },
       { name: 'التخطيط الاستراتيجي', org: 'معهد الإدارة العامة' },
       { name: 'إدارة الموارد البشرية', org: 'معهد الإدارة العامة' },
       { name: 'إدارة التغيير', org: 'معهد الإدارة العامة' }
     ],
-    experience: [
+    eduHeading: 'الشهادات العلمية',
+    edu: [
+      { degree: 'ماجستير في التعليم (2017)', uni: 'جامعة لويس - شيكاغو، الولايات المتحدة', note: 'برنامج الملك عبدالله للابتعاث', topics: ['سياسات التعليم','إعداد البرامج التعليمية','تحليل المناهج','معايير التقييم','إدارة المنظمات التعليمية','قيادة الأعمال'] },
+      { degree: 'بكالوريوس تعليم اللغة الإنجليزية (2007)', uni: 'جامعة الملك سعود – الرياض', note: '', topics: ['تعليم اللغة الإنجليزية كلغة ثانية','الإعداد التربوي','القيادة التعليمية','سياسات التعليم'] }
+    ],
+    expHeading: 'الخبرات العملية',
+    exp: [
       { title: 'معلم لغة إنجليزية (2013 - حتى الآن)', org: 'وزارة التعليم', tasks: ['تعليم اللغة الإنجليزية وإعداد البرامج التعليمية','قياس مستوى الأثر وإعداد الخطط الدراسية','المشاركة في إعداد المناهج والمبادرات التطويرية','إعداد التقارير التربوية والمشاركة في اللجان'] },
       { title: 'مدير عام (2003 - 2013) — 10 سنوات', org: 'الشركة الوطنية للاستشارات', tasks: ['تقديم الاستشارات الإدارية والفنية مع فريق العمل','الإشراف على العمليات التشغيلية وإدارة الميزانية','التخطيط الاستراتيجي وقياس مؤشرات الأداء','تمثيل الجهة وبناء العلاقات المؤسسية'] }
     ],
+    skillsHeading: 'المهارات',
     skills: [
       { name: 'القيادة الاستراتيجية وصناعة القرار', pct: 97 },
       { name: 'إدارة الجودة', pct: 96 },
@@ -89,626 +158,731 @@ const translations = {
       { name: 'تحليل المواقف التعليمية', pct: 97 },
       { name: 'توظيف أفضل الممارسات', pct: 95 }
     ],
-    contact: 'تواصل معي',
-    tableHeaders: ['م','اسم البرنامج التدريبي','الجهة المنظمة','التاريخ','المدة'],
-    footer: '© 2024 ماجد علي سعيد أبوراس - جميع الحقوق محفوظة'
+    trainingHeading: 'البرامج التدريبية',
+    trainingCols: ['#', 'اسم البرنامج التدريبي', 'الجهة المنظمة', 'التاريخ', 'المدة / الساعات'],
+    navItems: [
+      { id: 'hero', label: 'الرئيسية' },
+      { id: 'objective', label: 'الهدف الوظيفي' },
+      { id: 'certifications', label: 'الشهادات المهنية' },
+      { id: 'education', label: 'الشهادات العلمية' },
+      { id: 'experience', label: 'الخبرات العملية' },
+      { id: 'skills', label: 'المهارات' },
+      { id: 'training', label: 'البرامج التدريبية' }
+    ]
   },
   en: {
-    dir: 'ltr', lang: 'en', fontFamily: "'Poppins', sans-serif",
-    name: 'Majed Ali Saeed Abu Ras',
-    title: 'Specialist in Educational Leadership & Strategic Planning',
-    nav: 'Menu',
-    sections: ['Profile','Career Objective','Academic Qualifications','Professional Certifications','Work Experience','Training Programs','Skills','Contact'],
-    profile: {
-      location: 'Riyadh - Al Muhammadiyah',
-      email: 'masa760u@gmail.com',
-      phone: '0554441449',
-      country: 'Saudi Arabia',
-      experience: '18+ Years Experience',
-      education: 'Master in Education'
-    },
-    objective: 'I aspire to leverage my executive and educational experience along with my qualifications in educational leadership to support strategic decision-making and achieve institutional integration between strategic planning and field execution, in alignment with Saudi Vision 2030 goals through work in the General Education Agency.',
-    degrees: [
-      { title: 'Master of Education (2017)', institution: 'Lewis University - Chicago, USA', note: 'King Abdullah Scholarship Program', topics: ['Education Policy','Curriculum Development','Curriculum Analysis','Assessment Standards','Educational Organization Management','Business Leadership'] },
-      { title: 'Bachelor in English Language Teaching (2007)', institution: 'King Saud University - Riyadh', note: '', topics: ['Teaching English as a Second Language','Educational Preparation','Educational Leadership','Education Policy'] }
-    ],
-    certifications: [
+    dir: 'ltr', lang: 'en',
+    navTitle: 'Menu', langLabel: 'Language',
+    headerName: 'Majed Abu Ras',
+    heroName: 'Majed Ali Abu Ras',
+    heroTitle: 'Specialist in Educational Leadership & Strategic Planning',
+    heroLoc: 'Riyadh - Al Muhammadiyah',
+    heroCountry: 'Saudi Arabia',
+    heroExp: '18+ Years Experience', heroDeg: 'Master in Education',
+    objHeading: 'Career Objective',
+    objText: 'I aspire to leverage my executive and educational experience along with my qualifications in educational leadership to support strategic decision-making and achieve institutional integration between strategic planning and field implementation, in alignment with Saudi Vision 2030 goals through working in the General Education Agency.',
+    certHeading: 'Professional Certifications',
+    certs: [
       { name: 'Quality, Evaluation & Accreditation Program', org: 'Education & Training Evaluation Commission' },
-      { name: 'Internal Auditor ISO 9001', org: 'Technical & Vocational Training Corporation' },
+      { name: 'ISO 9001 Internal Auditor', org: 'Technical & Vocational Training Corporation' },
       { name: 'Strategic Planning', org: 'Institute of Public Administration' },
       { name: 'Human Resources Management', org: 'Institute of Public Administration' },
       { name: 'Change Management', org: 'Institute of Public Administration' }
     ],
-    experience: [
-      { title: 'English Teacher (2013 - Present)', org: 'Ministry of Education', tasks: ['Teaching English and developing educational programs','Measuring impact and preparing lesson plans','Participating in curriculum development and initiatives','Preparing educational reports and committee participation'] },
-      { title: 'General Manager (2003 - 2013) — 10 Years', org: 'National Consulting Company', tasks: ['Providing administrative and technical consultations','Supervising operations and budget management','Strategic planning and KPI measurement','Representing the organization and building institutional relationships'] }
+    eduHeading: 'Academic Qualifications',
+    edu: [
+      { degree: 'Master of Education (2017)', uni: 'Lewis University - Chicago, USA', note: 'King Abdullah Scholarship Program', topics: ['Education Policy','Curriculum Development','Curriculum Analysis','Assessment Standards','Educational Organization Management','Business Leadership'] },
+      { degree: 'Bachelor of English Language Teaching (2007)', uni: 'King Saud University - Riyadh', note: '', topics: ['Teaching English as a Second Language','Educational Preparation','Educational Leadership','Education Policy'] }
     ],
+    expHeading: 'Professional Experience',
+    exp: [
+      { title: 'English Language Teacher (2013 - Present)', org: 'Ministry of Education', tasks: ['Teaching English and developing educational programs','Measuring impact and preparing study plans','Contributing to curriculum development and initiatives','Preparing educational reports and committee participation'] },
+      { title: 'General Manager (2003 - 2013) — 10 Years', org: 'National Consulting Company', tasks: ['Providing administrative and technical consultancy','Supervising operations and budget management','Strategic planning and KPI measurement','Stakeholder representation and institutional relationship building'] }
+    ],
+    skillsHeading: 'Skills',
     skills: [
       { name: 'Strategic Leadership & Decision Making', pct: 97 },
       { name: 'Quality Management', pct: 96 },
-      { name: 'Planning & Institutional Performance', pct: 98 },
+      { name: 'Planning & Institutional Performance Measurement', pct: 98 },
       { name: 'Team Development & Management', pct: 95 },
-      { name: 'Change & Institutional Transformation', pct: 98 },
-      { name: 'Building Partnerships & Formal Relations', pct: 96 },
+      { name: 'Change Management & Institutional Transformation', pct: 98 },
+      { name: 'Building Partnerships & Official Relations', pct: 96 },
       { name: 'Educational Situation Analysis', pct: 97 },
-      { name: 'Implementing Best Practices', pct: 95 }
+      { name: 'Employing Best Practices', pct: 95 }
     ],
-    contact: 'Contact Me',
-    tableHeaders: ['#','Training Program','Organizing Body','Date','Duration'],
-    footer: '© 2024 Majed Ali Saeed Abu Ras - All Rights Reserved'
+    trainingHeading: 'Training Programs',
+    trainingCols: ['#', 'Program Name', 'Organizer', 'Date', 'Duration/Hours'],
+    navItems: [
+      { id: 'hero', label: 'Home' },
+      { id: 'objective', label: 'Objective' },
+      { id: 'certifications', label: 'Certifications' },
+      { id: 'education', label: 'Education' },
+      { id: 'experience', label: 'Experience' },
+      { id: 'skills', label: 'Skills' },
+      { id: 'training', label: 'Training' }
+    ]
   },
   fr: {
-    dir: 'ltr', lang: 'fr', fontFamily: "'Poppins', sans-serif",
-    name: 'Majed Ali Saeed Abu Ras',
-    title: 'Spécialiste en leadership éducatif et planification stratégique',
-    nav: 'Menu',
-    sections: ['Profil','Objectif de carrière','Diplômes','Certifications professionnelles','Expérience','Programmes de formation','Compétences','Contact'],
-    profile: { location: 'Riyad - Al Muhammadiyah', email: 'masa760u@gmail.com', phone: '0554441449', country: 'Arabie Saoudite', experience: '+18 ans d\'expérience', education: 'Master en éducation' },
-    objective: 'J\'aspire à mettre à profit mon expérience exécutive et éducative ainsi que mes qualifications en leadership éducatif pour soutenir la prise de décision stratégique et réaliser l\'intégration institutionnelle entre la planification stratégique et l\'exécution sur le terrain, conformément aux objectifs de la Vision 2030 de l\'Arabie Saoudite.',
-    degrees: [
-      { title: 'Master en éducation (2017)', institution: 'Université Lewis - Chicago, USA', note: 'Programme de bourses du Roi Abdullah', topics: ['Politiques éducatives','Développement de programmes','Analyse des curricula','Normes d\'évaluation','Gestion des organisations éducatives','Leadership d\'entreprise'] },
-      { title: 'Licence en enseignement de l\'anglais (2007)', institution: 'Université King Saud - Riyad', note: '', topics: ['Enseignement de l\'anglais langue seconde','Préparation pédagogique','Leadership éducatif','Politiques éducatives'] }
-    ],
-    certifications: [
-      { name: 'Programme Qualité, Évaluation et Accréditation', org: 'Commission d\'évaluation de l\'éducation' },
+    dir: 'ltr', lang: 'fr',
+    navTitle: 'Menu', langLabel: 'Langue',
+    headerName: 'Majed Abu Ras',
+    heroName: 'Majed Ali Abu Ras',
+    heroTitle: 'Spécialiste en leadership éducatif et planification stratégique',
+    heroLoc: 'Riyad - Al Muhammadiyah',
+    heroCountry: 'Arabie Saoudite',
+    heroExp: '+18 ans d\'expérience', heroDeg: 'Master en éducation',
+    objHeading: 'Objectif professionnel',
+    objText: 'J\'aspire à mettre à profit mon expérience exécutive et éducative ainsi que mes qualifications en leadership éducatif pour soutenir la prise de décision stratégique et réaliser l\'intégration institutionnelle entre la planification stratégique et la mise en œuvre sur le terrain, conformément aux objectifs de la Vision 2030 du Royaume.',
+    certHeading: 'Certifications professionnelles',
+    certs: [
+      { name: 'Programme qualité, évaluation et accréditation', org: 'Commission d\'évaluation de l\'éducation' },
       { name: 'Auditeur interne ISO 9001', org: 'Corporation de formation technique' },
       { name: 'Planification stratégique', org: 'Institut d\'administration publique' },
       { name: 'Gestion des ressources humaines', org: 'Institut d\'administration publique' },
       { name: 'Gestion du changement', org: 'Institut d\'administration publique' }
     ],
-    experience: [
-      { title: 'Enseignant d\'anglais (2013 - présent)', org: 'Ministère de l\'Éducation', tasks: ['Enseignement de l\'anglais et développement de programmes','Mesure d\'impact et préparation de plans de cours','Participation au développement des curricula','Préparation de rapports éducatifs'] },
-      { title: 'Directeur général (2003 - 2013) — 10 ans', org: 'Société Nationale de Conseil', tasks: ['Fourniture de consultations administratives et techniques','Supervision des opérations et gestion du budget','Planification stratégique et mesure des KPI','Représentation et relations institutionnelles'] }
+    eduHeading: 'Diplômes académiques',
+    edu: [
+      { degree: 'Master en éducation (2017)', uni: 'Université Lewis - Chicago, USA', note: 'Programme de bourses du Roi Abdullah', topics: ['Politiques éducatives','Développement de programmes','Analyse des curricula','Normes d\'évaluation','Gestion des organisations éducatives','Leadership'] },
+      { degree: 'Licence en enseignement de l\'anglais (2007)', uni: 'Université King Saud - Riyad', note: '', topics: ['Enseignement de l\'anglais langue seconde','Préparation pédagogique','Leadership éducatif','Politiques éducatives'] }
     ],
+    expHeading: 'Expérience professionnelle',
+    exp: [
+      { title: 'Professeur d\'anglais (2013 - présent)', org: 'Ministère de l\'Éducation', tasks: ['Enseignement de l\'anglais et développement de programmes','Mesure de l\'impact et préparation des plans','Contribution au développement des curricula','Préparation des rapports éducatifs'] },
+      { title: 'Directeur général (2003 - 2013) — 10 ans', org: 'Société nationale de conseil', tasks: ['Conseil administratif et technique','Supervision des opérations et gestion budgétaire','Planification stratégique et mesure des KPI','Représentation et relations institutionnelles'] }
+    ],
+    skillsHeading: 'Compétences',
     skills: [
       { name: 'Leadership stratégique et prise de décision', pct: 97 },
       { name: 'Gestion de la qualité', pct: 96 },
-      { name: 'Planification et performance institutionnelle', pct: 98 },
-      { name: 'Développement et gestion d\'équipe', pct: 95 },
-      { name: 'Gestion du changement institutionnel', pct: 98 },
-      { name: 'Construction de partenariats', pct: 96 },
+      { name: 'Planification et mesure de performance', pct: 98 },
+      { name: 'Développement et gestion d\'équipes', pct: 95 },
+      { name: 'Gestion du changement', pct: 98 },
+      { name: 'Partenariats et relations officielles', pct: 96 },
       { name: 'Analyse des situations éducatives', pct: 97 },
-      { name: 'Mise en œuvre des meilleures pratiques', pct: 95 }
+      { name: 'Meilleures pratiques', pct: 95 }
     ],
-    contact: 'Contactez-moi',
-    tableHeaders: ['N°','Programme de formation','Organisme','Date','Durée'],
-    footer: '© 2024 Majed Ali Saeed Abu Ras - Tous droits réservés'
+    trainingHeading: 'Programmes de formation',
+    trainingCols: ['#', 'Nom du programme', 'Organisateur', 'Date', 'Durée/Heures'],
+    navItems: [
+      { id: 'hero', label: 'Accueil' },
+      { id: 'objective', label: 'Objectif' },
+      { id: 'certifications', label: 'Certifications' },
+      { id: 'education', label: 'Diplômes' },
+      { id: 'experience', label: 'Expérience' },
+      { id: 'skills', label: 'Compétences' },
+      { id: 'training', label: 'Formation' }
+    ]
   },
   es: {
-    dir: 'ltr', lang: 'es', fontFamily: "'Poppins', sans-serif",
-    name: 'Majed Ali Saeed Abu Ras',
-    title: 'Especialista en Liderazgo Educativo y Planificación Estratégica',
-    nav: 'Menú',
-    sections: ['Perfil','Objetivo profesional','Títulos académicos','Certificaciones','Experiencia laboral','Programas de formación','Habilidades','Contacto'],
-    profile: { location: 'Riad - Al Muhammadiyah', email: 'masa760u@gmail.com', phone: '0554441449', country: 'Arabia Saudita', experience: '+18 años de experiencia', education: 'Máster en Educación' },
-    objective: 'Aspiro a aprovechar mi experiencia ejecutiva y educativa junto con mis cualificaciones en liderazgo educativo para apoyar la toma de decisiones estratégicas y lograr la integración institucional entre la planificación estratégica y la ejecución en el campo, en consonancia con los objetivos de la Visión 2030 de Arabia Saudita.',
-    degrees: [
-      { title: 'Máster en Educación (2017)', institution: 'Universidad Lewis - Chicago, EE.UU.', note: 'Programa de becas del Rey Abdullah', topics: ['Políticas educativas','Desarrollo curricular','Análisis de planes de estudio','Estándares de evaluación','Gestión de organizaciones educativas','Liderazgo empresarial'] },
-      { title: 'Licenciatura en Enseñanza del Inglés (2007)', institution: 'Universidad King Saud - Riad', note: '', topics: ['Enseñanza del inglés como segunda lengua','Preparación pedagógica','Liderazgo educativo','Políticas educativas'] }
+    dir: 'ltr', lang: 'es',
+    navTitle: 'Menú', langLabel: 'Idioma',
+    headerName: 'Majed Abu Ras',
+    heroName: 'Majed Ali Abu Ras',
+    heroTitle: 'Especialista en liderazgo educativo y planificación estratégica',
+    heroLoc: 'Riad - Al Muhammadiyah',
+    heroCountry: 'Arabia Saudita',
+    heroExp: '+18 años de experiencia', heroDeg: 'Máster en Educación',
+    objHeading: 'Objetivo profesional',
+    objText: 'Aspiro a aprovechar mi experiencia ejecutiva y educativa junto con mis cualificaciones en liderazgo educativo para apoyar la toma de decisiones estratégicas y lograr la integración institucional entre la planificación estratégica y la implementación en campo, en línea con los objetivos de la Visión 2030.',
+    certHeading: 'Certificaciones profesionales',
+    certs: [
+      { name: 'Programa de calidad, evaluación y acreditación', org: 'Comisión de Evaluación Educativa' },
+      { name: 'Auditor interno ISO 9001', org: 'Corporación de Formación Técnica' },
+      { name: 'Planificación estratégica', org: 'Instituto de Administración Pública' },
+      { name: 'Gestión de recursos humanos', org: 'Instituto de Administración Pública' },
+      { name: 'Gestión del cambio', org: 'Instituto de Administración Pública' }
     ],
-    certifications: [
-      { name: 'Programa de Calidad, Evaluación y Acreditación', org: 'Comisión de Evaluación Educativa' },
-      { name: 'Auditor Interno ISO 9001', org: 'Corporación de Formación Técnica' },
-      { name: 'Planificación Estratégica', org: 'Instituto de Administración Pública' },
-      { name: 'Gestión de Recursos Humanos', org: 'Instituto de Administración Pública' },
-      { name: 'Gestión del Cambio', org: 'Instituto de Administración Pública' }
+    eduHeading: 'Títulos académicos',
+    edu: [
+      { degree: 'Máster en Educación (2017)', uni: 'Universidad Lewis - Chicago, EE.UU.', note: 'Programa de becas Rey Abdullah', topics: ['Políticas educativas','Desarrollo curricular','Análisis de planes de estudio','Estándares de evaluación','Gestión de organizaciones educativas','Liderazgo'] },
+      { degree: 'Licenciatura en Enseñanza del Inglés (2007)', uni: 'Universidad King Saud - Riad', note: '', topics: ['Enseñanza del inglés como segunda lengua','Preparación pedagógica','Liderazgo educativo','Políticas educativas'] }
     ],
-    experience: [
-      { title: 'Profesor de Inglés (2013 - presente)', org: 'Ministerio de Educación', tasks: ['Enseñanza del inglés y desarrollo de programas','Medición de impacto y preparación de planes','Participación en desarrollo curricular','Preparación de informes educativos'] },
-      { title: 'Director General (2003 - 2013) — 10 años', org: 'Empresa Nacional de Consultoría', tasks: ['Consultoría administrativa y técnica','Supervisión de operaciones y gestión presupuestaria','Planificación estratégica y medición de KPIs','Representación y relaciones institucionales'] }
+    expHeading: 'Experiencia profesional',
+    exp: [
+      { title: 'Profesor de inglés (2013 - presente)', org: 'Ministerio de Educación', tasks: ['Enseñanza del inglés y desarrollo de programas','Medición de impacto y preparación de planes','Contribución al desarrollo curricular','Preparación de informes educativos'] },
+      { title: 'Director general (2003 - 2013) — 10 años', org: 'Empresa Nacional de Consultoría', tasks: ['Consultoría administrativa y técnica','Supervisión de operaciones y gestión presupuestaria','Planificación estratégica y medición de KPIs','Representación y relaciones institucionales'] }
     ],
+    skillsHeading: 'Habilidades',
     skills: [
       { name: 'Liderazgo estratégico y toma de decisiones', pct: 97 },
-      { name: 'Gestión de la calidad', pct: 96 },
-      { name: 'Planificación y rendimiento institucional', pct: 98 },
+      { name: 'Gestión de calidad', pct: 96 },
+      { name: 'Planificación y medición del desempeño', pct: 98 },
       { name: 'Desarrollo y gestión de equipos', pct: 95 },
-      { name: 'Gestión del cambio institucional', pct: 98 },
-      { name: 'Construcción de alianzas', pct: 96 },
+      { name: 'Gestión del cambio', pct: 98 },
+      { name: 'Alianzas y relaciones oficiales', pct: 96 },
       { name: 'Análisis de situaciones educativas', pct: 97 },
-      { name: 'Implementación de mejores prácticas', pct: 95 }
+      { name: 'Mejores prácticas', pct: 95 }
     ],
-    contact: 'Contáctame',
-    tableHeaders: ['N°','Programa de formación','Organismo','Fecha','Duración'],
-    footer: '© 2024 Majed Ali Saeed Abu Ras - Todos los derechos reservados'
+    trainingHeading: 'Programas de formación',
+    trainingCols: ['#', 'Nombre del programa', 'Organizador', 'Fecha', 'Duración/Horas'],
+    navItems: [
+      { id: 'hero', label: 'Inicio' },
+      { id: 'objective', label: 'Objetivo' },
+      { id: 'certifications', label: 'Certificaciones' },
+      { id: 'education', label: 'Educación' },
+      { id: 'experience', label: 'Experiencia' },
+      { id: 'skills', label: 'Habilidades' },
+      { id: 'training', label: 'Formación' }
+    ]
   },
   de: {
-    dir: 'ltr', lang: 'de', fontFamily: "'Poppins', sans-serif",
-    name: 'Majed Ali Saeed Abu Ras',
-    title: 'Spezialist für Bildungsführung und strategische Planung',
-    nav: 'Menü',
-    sections: ['Profil','Berufsziel','Akademische Abschlüsse','Zertifizierungen','Berufserfahrung','Fortbildungen','Fähigkeiten','Kontakt'],
-    profile: { location: 'Riad - Al Muhammadiyah', email: 'masa760u@gmail.com', phone: '0554441449', country: 'Saudi-Arabien', experience: '18+ Jahre Erfahrung', education: 'Master in Bildung' },
-    objective: 'Ich strebe danach, meine Führungs- und Bildungserfahrung sowie meine Qualifikationen in der Bildungsführung einzusetzen, um strategische Entscheidungen zu unterstützen und die institutionelle Integration zwischen strategischer Planung und Feldumsetzung zu erreichen, im Einklang mit den Zielen der Saudi Vision 2030.',
-    degrees: [
-      { title: 'Master in Bildung (2017)', institution: 'Lewis Universität - Chicago, USA', note: 'König-Abdullah-Stipendienprogramm', topics: ['Bildungspolitik','Programmentwicklung','Lehrplananalyse','Bewertungsstandards','Management von Bildungsorganisationen','Unternehmensführung'] },
-      { title: 'Bachelor in Englischunterricht (2007)', institution: 'King Saud Universität - Riad', note: '', topics: ['Englisch als Zweitsprache','Pädagogische Vorbereitung','Bildungsführung','Bildungspolitik'] }
-    ],
-    certifications: [
+    dir: 'ltr', lang: 'de',
+    navTitle: 'Menü', langLabel: 'Sprache',
+    headerName: 'Majed Abu Ras',
+    heroName: 'Majed Ali Abu Ras',
+    heroTitle: 'Spezialist für Bildungsführung und strategische Planung',
+    heroLoc: 'Riad - Al Muhammadiyah',
+    heroCountry: 'Saudi-Arabien',
+    heroExp: '+18 Jahre Erfahrung', heroDeg: 'Master in Bildung',
+    objHeading: 'Berufsziel',
+    objText: 'Ich strebe danach, meine Führungs- und Bildungserfahrung sowie meine Qualifikationen in der Bildungsführung einzusetzen, um strategische Entscheidungsfindung zu unterstützen und die institutionelle Integration zwischen strategischer Planung und Umsetzung im Einklang mit der Vision 2030 zu erreichen.',
+    certHeading: 'Berufliche Zertifizierungen',
+    certs: [
       { name: 'Qualitäts-, Evaluierungs- und Akkreditierungsprogramm', org: 'Kommission für Bildungsbewertung' },
-      { name: 'Interner Auditor ISO 9001', org: 'Technische Ausbildungskorporation' },
+      { name: 'ISO 9001 Interner Auditor', org: 'Technische Ausbildungskorporation' },
       { name: 'Strategische Planung', org: 'Institut für öffentliche Verwaltung' },
       { name: 'Personalmanagement', org: 'Institut für öffentliche Verwaltung' },
-      { name: 'Veränderungsmanagement', org: 'Institut für öffentliche Verwaltung' }
+      { name: 'Change Management', org: 'Institut für öffentliche Verwaltung' }
     ],
-    experience: [
-      { title: 'Englischlehrer (2013 - heute)', org: 'Bildungsministerium', tasks: ['Englischunterricht und Programmentwicklung','Wirkungsmessung und Unterrichtsplanung','Mitwirkung an Lehrplanentwicklung','Erstellung von Bildungsberichten'] },
-      { title: 'Geschäftsführer (2003 - 2013) — 10 Jahre', org: 'Nationale Beratungsgesellschaft', tasks: ['Administrative und technische Beratung','Betriebsüberwachung und Budgetmanagement','Strategische Planung und KPI-Messung','Vertretung und institutionelle Beziehungen'] }
+    eduHeading: 'Akademische Qualifikationen',
+    edu: [
+      { degree: 'Master of Education (2017)', uni: 'Lewis Universität - Chicago, USA', note: 'König-Abdullah-Stipendienprogramm', topics: ['Bildungspolitik','Curriculumentwicklung','Lehrplananalyse','Bewertungsstandards','Bildungsorganisationsmanagement','Führung'] },
+      { degree: 'Bachelor in Englischunterricht (2007)', uni: 'King Saud Universität - Riad', note: '', topics: ['Englisch als Zweitsprache','Pädagogische Vorbereitung','Bildungsführung','Bildungspolitik'] }
     ],
+    expHeading: 'Berufserfahrung',
+    exp: [
+      { title: 'Englischlehrer (2013 - heute)', org: 'Bildungsministerium', tasks: ['Englischunterricht und Programmentwicklung','Wirkungsmessung und Lehrplanvorbereitung','Beitrag zur Curriculumentwicklung','Erstellung von Bildungsberichten'] },
+      { title: 'Geschäftsführer (2003 - 2013) — 10 Jahre', org: 'Nationale Beratungsgesellschaft', tasks: ['Administrative und technische Beratung','Betriebsaufsicht und Budgetverwaltung','Strategische Planung und KPI-Messung','Vertretung und institutionelle Beziehungen'] }
+    ],
+    skillsHeading: 'Fähigkeiten',
     skills: [
       { name: 'Strategische Führung und Entscheidungsfindung', pct: 97 },
       { name: 'Qualitätsmanagement', pct: 96 },
-      { name: 'Planung und institutionelle Leistung', pct: 98 },
+      { name: 'Planung und Leistungsmessung', pct: 98 },
       { name: 'Teamentwicklung und -management', pct: 95 },
-      { name: 'Veränderungs- und Transformationsmanagement', pct: 98 },
-      { name: 'Aufbau von Partnerschaften', pct: 96 },
-      { name: 'Analyse von Bildungssituationen', pct: 97 },
-      { name: 'Umsetzung bewährter Praktiken', pct: 95 }
+      { name: 'Change Management', pct: 98 },
+      { name: 'Partnerschaften und offizielle Beziehungen', pct: 96 },
+      { name: 'Bildungssituationsanalyse', pct: 97 },
+      { name: 'Best Practices', pct: 95 }
     ],
-    contact: 'Kontakt',
-    tableHeaders: ['Nr.','Fortbildungsprogramm','Veranstalter','Datum','Dauer'],
-    footer: '© 2024 Majed Ali Saeed Abu Ras - Alle Rechte vorbehalten'
-  },
-  zh: {
-    dir: 'ltr', lang: 'zh', fontFamily: "'Poppins', sans-serif",
-    name: 'ماجد علي سعيد أبوراس',
-    title: '教育领导力与战略规划专家',
-    nav: '菜单',
-    sections: ['个人简介','职业目标','学历','专业证书','工作经验','培训项目','技能','联系方式'],
-    profile: { location: '利雅得 - 穆罕默迪亚区', email: 'masa760u@gmail.com', phone: '0554441449', country: '沙特阿拉伯', experience: '18年以上经验', education: '教育学硕士' },
-    objective: '我渴望利用我在教育领导力方面的行政和教育经验及资质，支持战略决策，实现战略规划与现场执行之间的制度整合，以符合沙特2030愿景的目标。',
-    degrees: [
-      { title: '教育学硕士 (2017)', institution: '路易斯大学 - 芝加哥，美国', note: '阿卜杜拉国王奖学金项目', topics: ['教育政策','课程开发','课程分析','评估标准','教育组织管理','商业领导力'] },
-      { title: '英语教学学士 (2007)', institution: '沙特国王大学 - 利雅得', note: '', topics: ['英语作为第二语言教学','教育准备','教育领导力','教育政策'] }
-    ],
-    certifications: [
-      { name: '质量、评估与认证项目', org: '教育培训评估委员会' },
-      { name: 'ISO 9001内部审计员', org: '技术职业培训公司' },
-      { name: '战略规划', org: '公共管理学院' },
-      { name: '人力资源管理', org: '公共管理学院' },
-      { name: '变革管理', org: '公共管理学院' }
-    ],
-    experience: [
-      { title: '英语教师 (2013 - 至今)', org: '教育部', tasks: ['英语教学和教育项目开发','影响力测量和课程计划准备','参与课程开发和倡议','编写教育报告和委员会参与'] },
-      { title: '总经理 (2003 - 2013) — 10年', org: '国家咨询公司', tasks: ['提供行政和技术咨询','监督运营和预算管理','战略规划和KPI测量','代表组织和建立机构关系'] }
-    ],
-    skills: [
-      { name: '战略领导力与决策', pct: 97 },
-      { name: '质量管理', pct: 96 },
-      { name: '规划与机构绩效', pct: 98 },
-      { name: '团队发展与管理', pct: 95 },
-      { name: '变革与机构转型管理', pct: 98 },
-      { name: '建立合作伙伴关系', pct: 96 },
-      { name: '教育情境分析', pct: 97 },
-      { name: '实施最佳实践', pct: 95 }
-    ],
-    contact: '联系我',
-    tableHeaders: ['序号','培训项目','组织机构','日期','时长'],
-    footer: '© 2024 Majed Ali Saeed Abu Ras - 版权所有'
-  },
-  ja: {
-    dir: 'ltr', lang: 'ja', fontFamily: "'Poppins', sans-serif",
-    name: 'マジェド・アリ・サイード・アブラス',
-    title: '教育リーダーシップと戦略的計画の専門家',
-    nav: 'メニュー',
-    sections: ['プロフィール','キャリア目標','学歴','専門資格','職歴','研修プログラム','スキル','連絡先'],
-    profile: { location: 'リヤド - アル・ムハンマディーヤ', email: 'masa760u@gmail.com', phone: '0554441449', country: 'サウジアラビア', experience: '18年以上の経験', education: '教育学修士' },
-    objective: '教育リーダーシップにおける私の経験と資格を活かし、戦略的意思決定を支援し、サウジビジョン2030の目標に沿った戦略的計画と現場実行の制度的統合を実現することを目指しています。',
-    degrees: [
-      { title: '教育学修士 (2017)', institution: 'ルイス大学 - シカゴ、アメリカ', note: 'アブドラ国王奨学金プログラム', topics: ['教育政策','カリキュラム開発','カリキュラム分析','評価基準','教育組織管理','ビジネスリーダーシップ'] },
-      { title: '英語教育学士 (2007)', institution: 'キングサウド大学 - リヤド', note: '', topics: ['第二言語としての英語教育','教育準備','教育リーダーシップ','教育政策'] }
-    ],
-    certifications: [
-      { name: '品質・評価・認定プログラム', org: '教育訓練評価委員会' },
-      { name: 'ISO 9001内部監査員', org: '技術職業訓練公社' },
-      { name: '戦略的計画', org: '行政学院' },
-      { name: '人材管理', org: '行政学院' },
-      { name: '変革管理', org: '行政学院' }
-    ],
-    experience: [
-      { title: '英語教師 (2013 - 現在)', org: '教育省', tasks: ['英語教育とプログラム開発','影響測定と授業計画の準備','カリキュラム開発への参加','教育報告書の作成'] },
-      { title: '総支配人 (2003 - 2013) — 10年', org: '国立コンサルティング会社', tasks: ['管理・技術コンサルティングの提供','運営監督と予算管理','戦略的計画とKPI測定','組織代表と制度的関係構築'] }
-    ],
-    skills: [
-      { name: '戦略的リーダーシップと意思決定', pct: 97 },
-      { name: '品質管理', pct: 96 },
-      { name: '計画と組織パフォーマンス', pct: 98 },
-      { name: 'チーム開発と管理', pct: 95 },
-      { name: '変革と組織変革管理', pct: 98 },
-      { name: 'パートナーシップ構築', pct: 96 },
-      { name: '教育状況分析', pct: 97 },
-      { name: 'ベストプラクティスの実施', pct: 95 }
-    ],
-    contact: 'お問い合わせ',
-    tableHeaders: ['番号','研修プログラム','主催機関','日付','期間'],
-    footer: '© 2024 マジェド・アリ・サイード・アブラス - 全著作権所有'
-  },
-  ko: {
-    dir: 'ltr', lang: 'ko', fontFamily: "'Poppins', sans-serif",
-    name: '마제드 알리 사이드 아부라스',
-    title: '교육 리더십 및 전략 기획 전문가',
-    nav: '메뉴',
-    sections: ['프로필','경력 목표','학력','전문 자격증','경력','교육 프로그램','기술','연락처'],
-    profile: { location: '리야드 - 알 무함마디야', email: 'masa760u@gmail.com', phone: '0554441449', country: '사우디아라비아', experience: '18년 이상 경력', education: '교육학 석사' },
-    objective: '교육 리더십에 대한 경험과 자격을 활용하여 전략적 의사결정을 지원하고, 사우디 비전 2030의 목표에 부합하는 전략적 계획과 현장 실행 간의 제도적 통합을 달성하고자 합니다.',
-    degrees: [
-      { title: '교육학 석사 (2017)', institution: '루이스 대학교 - 시카고, 미국', note: '압둘라 국왕 장학금 프로그램', topics: ['교육 정책','교육과정 개발','교육과정 분석','평가 기준','교육 조직 관리','비즈니스 리더십'] },
-      { title: '영어 교육학 학사 (2007)', institution: '킹 사우드 대학교 - 리야드', note: '', topics: ['제2외국어로서의 영어 교육','교육 준비','교육 리더십','교육 정책'] }
-    ],
-    certifications: [
-      { name: '품질, 평가 및 인증 프로그램', org: '교육훈련평가위원회' },
-      { name: 'ISO 9001 내부감사원', org: '기술직업훈련공사' },
-      { name: '전략 기획', org: '행정학원' },
-      { name: '인적자원 관리', org: '행정학원' },
-      { name: '변화 관리', org: '행정학원' }
-    ],
-    experience: [
-      { title: '영어 교사 (2013 - 현재)', org: '교육부', tasks: ['영어 교육 및 프로그램 개발','영향 측정 및 수업 계획 준비','교육과정 개발 참여','교육 보고서 작성'] },
-      { title: '총지배인 (2003 - 2013) — 10년', org: '국립 컨설팅 회사', tasks: ['행정 및 기술 컨설팅 제공','운영 감독 및 예산 관리','전략 기획 및 KPI 측정','조직 대표 및 제도적 관계 구축'] }
-    ],
-    skills: [
-      { name: '전략적 리더십과 의사결정', pct: 97 },
-      { name: '품질 관리', pct: 96 },
-      { name: '기획 및 조직 성과', pct: 98 },
-      { name: '팀 개발 및 관리', pct: 95 },
-      { name: '변화 및 조직 전환 관리', pct: 98 },
-      { name: '파트너십 구축', pct: 96 },
-      { name: '교육 상황 분석', pct: 97 },
-      { name: '모범 사례 구현', pct: 95 }
-    ],
-    contact: '연락처',
-    tableHeaders: ['번호','교육 프로그램','주관 기관','날짜','기간'],
-    footer: '© 2024 마제드 알리 사이드 아부라스 - 모든 권리 보유'
+    trainingHeading: 'Fortbildungsprogramme',
+    trainingCols: ['#', 'Programmname', 'Veranstalter', 'Datum', 'Dauer/Stunden'],
+    navItems: [
+      { id: 'hero', label: 'Startseite' },
+      { id: 'objective', label: 'Ziel' },
+      { id: 'certifications', label: 'Zertifizierungen' },
+      { id: 'education', label: 'Bildung' },
+      { id: 'experience', label: 'Erfahrung' },
+      { id: 'skills', label: 'Fähigkeiten' },
+      { id: 'training', label: 'Fortbildung' }
+    ]
   },
   tr: {
-    dir: 'ltr', lang: 'tr', fontFamily: "'Poppins', sans-serif",
-    name: 'Majed Ali Saeed Abu Ras',
-    title: 'Eğitim Liderliği ve Stratejik Planlama Uzmanı',
-    nav: 'Menü',
-    sections: ['Profil','Kariyer Hedefi','Akademik Yeterlilikler','Profesyonel Sertifikalar','İş Deneyimi','Eğitim Programları','Beceriler','İletişim'],
-    profile: { location: 'Riyad - Al Muhammadiyah', email: 'masa760u@gmail.com', phone: '0554441449', country: 'Suudi Arabistan', experience: '18+ Yıl Deneyim', education: 'Eğitim Yüksek Lisansı' },
-    objective: 'Eğitim liderliğindeki deneyim ve niteliklerimi stratejik karar alma süreçlerini desteklemek ve Suudi Vizyon 2030 hedefleriyle uyumlu olarak stratejik planlama ile saha uygulaması arasında kurumsal entegrasyonu sağlamak için kullanmayı hedefliyorum.',
-    degrees: [
-      { title: 'Eğitim Yüksek Lisansı (2017)', institution: 'Lewis Üniversitesi - Chicago, ABD', note: 'Kral Abdullah Burs Programı', topics: ['Eğitim Politikası','Müfredat Geliştirme','Müfredat Analizi','Değerlendirme Standartları','Eğitim Organizasyonu Yönetimi','İş Liderliği'] },
-      { title: 'İngilizce Öğretmenliği Lisans (2007)', institution: 'King Saud Üniversitesi - Riyad', note: '', topics: ['İkinci Dil Olarak İngilizce Öğretimi','Eğitim Hazırlığı','Eğitim Liderliği','Eğitim Politikası'] }
-    ],
-    certifications: [
+    dir: 'ltr', lang: 'tr',
+    navTitle: 'Menü', langLabel: 'Dil',
+    headerName: 'Majed Abu Ras',
+    heroName: 'Majed Ali Abu Ras',
+    heroTitle: 'Eğitim liderliği ve stratejik planlama uzmanı',
+    heroLoc: 'Riyad - Al Muhammadiyah',
+    heroCountry: 'Suudi Arabistan',
+    heroExp: '+18 yıl deneyim', heroDeg: 'Eğitim Yüksek Lisansı',
+    objHeading: 'Kariyer Hedefi',
+    objText: 'Yönetim ve eğitim deneyimimi stratejik karar alma süreçlerini desteklemek ve Vizyon 2030 hedeflerine uygun olarak stratejik planlama ile saha uygulaması arasında kurumsal entegrasyonu sağlamak için kullanmayı hedefliyorum.',
+    certHeading: 'Mesleki Sertifikalar',
+    certs: [
       { name: 'Kalite, Değerlendirme ve Akreditasyon Programı', org: 'Eğitim Değerlendirme Komisyonu' },
-      { name: 'ISO 9001 İç Denetçi', org: 'Teknik Mesleki Eğitim Kurumu' },
+      { name: 'ISO 9001 İç Denetçi', org: 'Teknik Eğitim Kurumu' },
       { name: 'Stratejik Planlama', org: 'Kamu Yönetimi Enstitüsü' },
       { name: 'İnsan Kaynakları Yönetimi', org: 'Kamu Yönetimi Enstitüsü' },
       { name: 'Değişim Yönetimi', org: 'Kamu Yönetimi Enstitüsü' }
     ],
-    experience: [
-      { title: 'İngilizce Öğretmeni (2013 - Günümüz)', org: 'Eğitim Bakanlığı', tasks: ['İngilizce öğretimi ve program geliştirme','Etki ölçümü ve ders planı hazırlama','Müfredat geliştirmeye katılım','Eğitim raporları hazırlama'] },
-      { title: 'Genel Müdür (2003 - 2013) — 10 Yıl', org: 'Ulusal Danışmanlık Şirketi', tasks: ['İdari ve teknik danışmanlık sağlama','Operasyon denetimi ve bütçe yönetimi','Stratejik planlama ve KPI ölçümü','Kurum temsili ve ilişki yönetimi'] }
+    eduHeading: 'Akademik Nitelikler',
+    edu: [
+      { degree: 'Eğitim Yüksek Lisansı (2017)', uni: 'Lewis Üniversitesi - Chicago, ABD', note: 'Kral Abdullah Burs Programı', topics: ['Eğitim Politikaları','Müfredat Geliştirme','Müfredat Analizi','Değerlendirme Standartları','Eğitim Organizasyon Yönetimi','Liderlik'] },
+      { degree: 'İngilizce Öğretmenliği Lisans (2007)', uni: 'King Saud Üniversitesi - Riyad', note: '', topics: ['İkinci dil olarak İngilizce','Pedagojik hazırlık','Eğitim liderliği','Eğitim politikaları'] }
     ],
+    expHeading: 'İş Deneyimi',
+    exp: [
+      { title: 'İngilizce Öğretmeni (2013 - günümüz)', org: 'Eğitim Bakanlığı', tasks: ['İngilizce öğretimi ve program geliştirme','Etki ölçümü ve ders planı hazırlama','Müfredat geliştirmeye katkı','Eğitim raporları hazırlama'] },
+      { title: 'Genel Müdür (2003 - 2013) — 10 yıl', org: 'Ulusal Danışmanlık Şirketi', tasks: ['İdari ve teknik danışmanlık','Operasyon denetimi ve bütçe yönetimi','Stratejik planlama ve KPI ölçümü','Temsil ve kurumsal ilişkiler'] }
+    ],
+    skillsHeading: 'Beceriler',
     skills: [
-      { name: 'Stratejik Liderlik ve Karar Verme', pct: 97 },
-      { name: 'Kalite Yönetimi', pct: 96 },
-      { name: 'Planlama ve Kurumsal Performans', pct: 98 },
-      { name: 'Ekip Geliştirme ve Yönetimi', pct: 95 },
-      { name: 'Değişim ve Kurumsal Dönüşüm', pct: 98 },
-      { name: 'Ortaklık Kurma', pct: 96 },
-      { name: 'Eğitim Durumu Analizi', pct: 97 },
-      { name: 'En İyi Uygulamaların Hayata Geçirilmesi', pct: 95 }
+      { name: 'Stratejik liderlik ve karar alma', pct: 97 },
+      { name: 'Kalite yönetimi', pct: 96 },
+      { name: 'Planlama ve performans ölçümü', pct: 98 },
+      { name: 'Takım geliştirme ve yönetimi', pct: 95 },
+      { name: 'Değişim yönetimi', pct: 98 },
+      { name: 'Ortaklıklar ve resmi ilişkiler', pct: 96 },
+      { name: 'Eğitim durumu analizi', pct: 97 },
+      { name: 'En iyi uygulamalar', pct: 95 }
     ],
-    contact: 'İletişim',
-    tableHeaders: ['No','Eğitim Programı','Düzenleyen Kuruluş','Tarih','Süre'],
-    footer: '© 2024 Majed Ali Saeed Abu Ras - Tüm Hakları Saklıdır'
+    trainingHeading: 'Eğitim Programları',
+    trainingCols: ['#', 'Program Adı', 'Düzenleyen', 'Tarih', 'Süre/Saat'],
+    navItems: [
+      { id: 'hero', label: 'Ana Sayfa' },
+      { id: 'objective', label: 'Hedef' },
+      { id: 'certifications', label: 'Sertifikalar' },
+      { id: 'education', label: 'Eğitim' },
+      { id: 'experience', label: 'Deneyim' },
+      { id: 'skills', label: 'Beceriler' },
+      { id: 'training', label: 'Eğitimler' }
+    ]
+  },
+  zh: {
+    dir: 'ltr', lang: 'zh',
+    navTitle: '菜单', langLabel: '语言',
+    headerName: 'Majed Abu Ras',
+    heroName: 'ماجد علي سعيد أبوراس',
+    heroTitle: '教育领导力与战略规划专家',
+    heroLoc: '利雅得 - 穆罕默迪亚区',
+    heroCountry: '沙特阿拉伯',
+    heroExp: '18年以上经验', heroDeg: '教育学硕士',
+    objHeading: '职业目标',
+    objText: '我希望利用我的行政和教育经验以及教育领导力资质，支持战略决策，实现战略规划与实地执行之间的机构整合，符合沙特2030愿景目标。',
+    certHeading: '专业认证',
+    certs: [
+      { name: '质量、评估与认证项目', org: '教育评估委员会' },
+      { name: 'ISO 9001内部审计师', org: '技术培训公司' },
+      { name: '战略规划', org: '公共管理学院' },
+      { name: '人力资源管理', org: '公共管理学院' },
+      { name: '变革管理', org: '公共管理学院' }
+    ],
+    eduHeading: '学术资质',
+    edu: [
+      { degree: '教育学硕士 (2017)', uni: '刘易斯大学 - 芝加哥，美国', note: '阿卜杜拉国王奖学金计划', topics: ['教育政策','课程开发','课程分析','评估标准','教育组织管理','领导力'] },
+      { degree: '英语教学学士 (2007)', uni: '沙特国王大学 - 利雅得', note: '', topics: ['英语作为第二语言教学','教学准备','教育领导力','教育政策'] }
+    ],
+    expHeading: '工作经验',
+    exp: [
+      { title: '英语教师 (2013至今)', org: '教育部', tasks: ['英语教学和项目开发','影响测量和教学计划准备','参与课程开发','准备教育报告'] },
+      { title: '总经理 (2003-2013) — 10年', org: '国家咨询公司', tasks: ['行政和技术咨询','运营监督和预算管理','战略规划和KPI测量','代表和机构关系建设'] }
+    ],
+    skillsHeading: '技能',
+    skills: [
+      { name: '战略领导与决策', pct: 97 },
+      { name: '质量管理', pct: 96 },
+      { name: '规划与绩效衡量', pct: 98 },
+      { name: '团队发展与管理', pct: 95 },
+      { name: '变革管理', pct: 98 },
+      { name: '伙伴关系与官方关系', pct: 96 },
+      { name: '教育情况分析', pct: 97 },
+      { name: '最佳实践', pct: 95 }
+    ],
+    trainingHeading: '培训项目',
+    trainingCols: ['#', '项目名称', '组织者', '日期', '时长/小时'],
+    navItems: [
+      { id: 'hero', label: '首页' },
+      { id: 'objective', label: '目标' },
+      { id: 'certifications', label: '认证' },
+      { id: 'education', label: '教育' },
+      { id: 'experience', label: '经验' },
+      { id: 'skills', label: '技能' },
+      { id: 'training', label: '培训' }
+    ]
+  },
+  ja: {
+    dir: 'ltr', lang: 'ja',
+    navTitle: 'メニュー', langLabel: '言語',
+    headerName: 'マジェド・アブ・ラス',
+    heroName: 'マジェド・アリ・サイード・アブ・ラス',
+    heroTitle: '教育リーダーシップと戦略計画の専門家',
+    heroLoc: 'リヤド - アル・ムハンマディーヤ',
+    heroCountry: 'サウジアラビア',
+    heroExp: '18年以上の経験', heroDeg: '教育学修士',
+    objHeading: 'キャリア目標',
+    objText: '教育リーダーシップの資格と経験を活かし、戦略的意思決定を支援し、ビジョン2030の目標に沿った戦略計画と実施の統合を実現することを目指しています。',
+    certHeading: '専門資格',
+    certs: [
+      { name: '品質・評価・認定プログラム', org: '教育評価委員会' },
+      { name: 'ISO 9001内部監査員', org: '技術訓練公社' },
+      { name: '戦略計画', org: '行政管理研究所' },
+      { name: '人事管理', org: '行政管理研究所' },
+      { name: '変革管理', org: '行政管理研究所' }
+    ],
+    eduHeading: '学歴',
+    edu: [
+      { degree: '教育学修士 (2017)', uni: 'ルイス大学 - シカゴ、米国', note: 'アブドラ国王奨学金プログラム', topics: ['教育政策','カリキュラム開発','カリキュラム分析','評価基準','教育組織管理','リーダーシップ'] },
+      { degree: '英語教育学士 (2007)', uni: 'キングサウド大学 - リヤド', note: '', topics: ['第二言語としての英語教育','教育準備','教育リーダーシップ','教育政策'] }
+    ],
+    expHeading: '職歴',
+    exp: [
+      { title: '英語教師 (2013年〜現在)', org: '教育省', tasks: ['英語教育とプログラム開発','影響測定と学習計画作成','カリキュラム開発への貢献','教育報告書の作成'] },
+      { title: '総支配人 (2003-2013) — 10年', org: '国立コンサルティング会社', tasks: ['行政・技術コンサルティング','業務監督と予算管理','戦略計画とKPI測定','代表と機関関係構築'] }
+    ],
+    skillsHeading: 'スキル',
+    skills: [
+      { name: '戦略的リーダーシップと意思決定', pct: 97 },
+      { name: '品質管理', pct: 96 },
+      { name: '計画とパフォーマンス測定', pct: 98 },
+      { name: 'チーム育成と管理', pct: 95 },
+      { name: '変革管理', pct: 98 },
+      { name: 'パートナーシップと公式関係', pct: 96 },
+      { name: '教育状況分析', pct: 97 },
+      { name: 'ベストプラクティス', pct: 95 }
+    ],
+    trainingHeading: '研修プログラム',
+    trainingCols: ['#', 'プログラム名', '主催者', '日付', '時間'],
+    navItems: [
+      { id: 'hero', label: 'ホーム' },
+      { id: 'objective', label: '目標' },
+      { id: 'certifications', label: '資格' },
+      { id: 'education', label: '学歴' },
+      { id: 'experience', label: '職歴' },
+      { id: 'skills', label: 'スキル' },
+      { id: 'training', label: '研修' }
+    ]
+  },
+  ko: {
+    dir: 'ltr', lang: 'ko',
+    navTitle: '메뉴', langLabel: '언어',
+    headerName: '마제드 아부 라스',
+    heroName: '마제드 알리 사이드 아부 라스',
+    heroTitle: '교육 리더십 및 전략 기획 전문가',
+    heroLoc: '리야드 - 알 무함마디야',
+    heroCountry: '사우디아라비아',
+    heroExp: '18년 이상 경력', heroDeg: '교육학 석사',
+    objHeading: '경력 목표',
+    objText: '교육 리더십 자격과 경영 및 교육 경험을 활용하여 전략적 의사결정을 지원하고 비전 2030 목표에 맞춰 전략 기획과 현장 실행 간의 제도적 통합을 달성하고자 합니다.',
+    certHeading: '전문 자격증',
+    certs: [
+      { name: '품질, 평가 및 인증 프로그램', org: '교육평가위원회' },
+      { name: 'ISO 9001 내부 감사원', org: '기술훈련공사' },
+      { name: '전략 기획', org: '행정관리연구소' },
+      { name: '인사관리', org: '행정관리연구소' },
+      { name: '변화관리', org: '행정관리연구소' }
+    ],
+    eduHeading: '학력',
+    edu: [
+      { degree: '교육학 석사 (2017)', uni: '루이스 대학교 - 시카고, 미국', note: '압둘라 국왕 장학 프로그램', topics: ['교육 정책','교육과정 개발','교육과정 분석','평가 기준','교육 조직 관리','리더십'] },
+      { degree: '영어교육학 학사 (2007)', uni: '킹 사우드 대학교 - 리야드', note: '', topics: ['제2외국어로서의 영어 교육','교육 준비','교육 리더십','교육 정책'] }
+    ],
+    expHeading: '경력',
+    exp: [
+      { title: '영어 교사 (2013 - 현재)', org: '교육부', tasks: ['영어 교육 및 프로그램 개발','영향 측정 및 학습 계획 준비','교육과정 개발 기여','교육 보고서 작성'] },
+      { title: '총지배인 (2003-2013) — 10년', org: '국립 컨설팅 회사', tasks: ['행정 및 기술 컨설팅','운영 감독 및 예산 관리','전략 기획 및 KPI 측정','대표 및 기관 관계 구축'] }
+    ],
+    skillsHeading: '역량',
+    skills: [
+      { name: '전략적 리더십 및 의사결정', pct: 97 },
+      { name: '품질 관리', pct: 96 },
+      { name: '기획 및 성과 측정', pct: 98 },
+      { name: '팀 개발 및 관리', pct: 95 },
+      { name: '변화 관리', pct: 98 },
+      { name: '파트너십 및 공식 관계', pct: 96 },
+      { name: '교육 상황 분석', pct: 97 },
+      { name: '모범 사례', pct: 95 }
+    ],
+    trainingHeading: '교육 프로그램',
+    trainingCols: ['#', '프로그램명', '주최', '날짜', '시간'],
+    navItems: [
+      { id: 'hero', label: '홈' },
+      { id: 'objective', label: '목표' },
+      { id: 'certifications', label: '자격증' },
+      { id: 'education', label: '학력' },
+      { id: 'experience', label: '경력' },
+      { id: 'skills', label: '역량' },
+      { id: 'training', label: '교육' }
+    ]
   },
   hi: {
-    dir: 'ltr', lang: 'hi', fontFamily: "'Poppins', sans-serif",
-    name: 'माजिद अली सईद अबू रास',
-    title: 'शैक्षिक नेतृत्व और रणनीतिक योजना विशेषज्ञ',
-    nav: 'मेनू',
-    sections: ['प्रोफ़ाइल','कैरियर लक्ष्य','शैक्षिक योग्यता','पेशेवर प्रमाणपत्र','कार्य अनुभव','प्रशिक्षण कार्यक्रम','कौशल','संपर्क'],
-    profile: { location: 'रियाद - अल मुहम्मदिया', email: 'masa760u@gmail.com', phone: '0554441449', country: 'सऊदी अरब', experience: '18+ वर्ष अनुभव', education: 'शिक्षा में मास्टर' },
-    objective: 'मैं शैक्षिक नेतृत्व में अपने अनुभव और योग्यता का उपयोग करके रणनीतिक निर्णय लेने में सहायता करना और सऊदी विजन 2030 के लक्ष्यों के अनुरूप रणनीतिक योजना और क्षेत्रीय कार्यान्वयन के बीच संस्थागत एकीकरण प्राप्त करना चाहता हूँ।',
-    degrees: [
-      { title: 'शिक्षा में मास्टर (2017)', institution: 'लुईस विश्वविद्यालय - शिकागो, अमेरिका', note: 'किंग अब्दुल्ला छात्रवृत्ति कार्यक्रम', topics: ['शिक्षा नीति','पाठ्यक्रम विकास','पाठ्यक्रम विश्लेषण','मूल्यांकन मानक','शैक्षिक संगठन प्रबंधन','व्यवसाय नेतृत्व'] },
-      { title: 'अंग्रेजी शिक्षण में स्नातक (2007)', institution: 'किंग सऊद विश्वविद्यालय - रियाद', note: '', topics: ['द्वितीय भाषा के रूप में अंग्रेजी शिक्षण','शैक्षिक तैयारी','शैक्षिक नेतृत्व','शिक्षा नीति'] }
-    ],
-    certifications: [
+    dir: 'ltr', lang: 'hi',
+    navTitle: 'मेन्यू', langLabel: 'भाषा',
+    headerName: 'माजिद अबू रास',
+    heroName: 'माजिद अली सईद अबू रास',
+    heroTitle: 'शैक्षिक नेतृत्व और रणनीतिक योजना विशेषज्ञ',
+    heroLoc: 'रियाद - अल मुहम्मदिया',
+    heroCountry: 'सऊदी अरब',
+    heroExp: '18+ वर्ष का अनुभव', heroDeg: 'शिक्षा में मास्टर',
+    objHeading: 'कैरियर उद्देश्य',
+    objText: 'मैं अपने कार्यकारी और शैक्षिक अनुभव तथा शैक्षिक नेतृत्व में अपनी योग्यता का उपयोग करके रणनीतिक निर्णय लेने में सहायता करना और विजन 2030 के लक्ष्यों के अनुरूप संस्थागत एकीकरण प्राप्त करना चाहता हूं।',
+    certHeading: 'व्यावसायिक प्रमाणपत्र',
+    certs: [
       { name: 'गुणवत्ता, मूल्यांकन और मान्यता कार्यक्रम', org: 'शिक्षा मूल्यांकन आयोग' },
-      { name: 'ISO 9001 आंतरिक लेखा परीक्षक', org: 'तकनीकी व्यावसायिक प्रशिक्षण निगम' },
+      { name: 'ISO 9001 आंतरिक लेखापरीक्षक', org: 'तकनीकी प्रशिक्षण निगम' },
       { name: 'रणनीतिक योजना', org: 'लोक प्रशासन संस्थान' },
       { name: 'मानव संसाधन प्रबंधन', org: 'लोक प्रशासन संस्थान' },
       { name: 'परिवर्तन प्रबंधन', org: 'लोक प्रशासन संस्थान' }
     ],
-    experience: [
-      { title: 'अंग्रेजी शिक्षक (2013 - वर्तमान)', org: 'शिक्षा मंत्रालय', tasks: ['अंग्रेजी शिक्षण और कार्यक्रम विकास','प्रभाव मापन और पाठ योजना तैयारी','पाठ्यक्रम विकास में भागीदारी','शैक्षिक रिपोर्ट तैयार करना'] },
-      { title: 'महाप्रबंधक (2003 - 2013) — 10 वर्ष', org: 'राष्ट्रीय परामर्श कंपनी', tasks: ['प्रशासनिक और तकनीकी परामर्श','संचालन पर्यवेक्षण और बजट प्रबंधन','रणनीतिक योजना और KPI मापन','संस्थागत प्रतिनिधित्व और संबंध निर्माण'] }
+    eduHeading: 'शैक्षिक योग्यता',
+    edu: [
+      { degree: 'शिक्षा में मास्टर (2017)', uni: 'लुईस विश्वविद्यालय - शिकागो, अमेरिका', note: 'राजा अब्दुल्ला छात्रवृत्ति कार्यक्रम', topics: ['शिक्षा नीति','पाठ्यक्रम विकास','पाठ्यक्रम विश्लेषण','मूल्यांकन मानक','शैक्षिक संगठन प्रबंधन','नेतृत्व'] },
+      { degree: 'अंग्रेजी शिक्षण में स्नातक (2007)', uni: 'किंग सऊद विश्वविद्यालय - रियाद', note: '', topics: ['दूसरी भाषा के रूप में अंग्रेजी','शैक्षिक तैयारी','शैक्षिक नेतृत्व','शिक्षा नीति'] }
     ],
+    expHeading: 'कार्य अनुभव',
+    exp: [
+      { title: 'अंग्रेजी शिक्षक (2013 - वर्तमान)', org: 'शिक्षा मंत्रालय', tasks: ['अंग्रेजी शिक्षण और कार्यक्रम विकास','प्रभाव मापन और पाठ योजना तैयारी','पाठ्यक्रम विकास में योगदान','शैक्षिक रिपोर्ट तैयार करना'] },
+      { title: 'महाप्रबंधक (2003-2013) — 10 वर्ष', org: 'राष्ट्रीय परामर्श कंपनी', tasks: ['प्रशासनिक और तकनीकी परामर्श','संचालन पर्यवेक्षण और बजट प्रबंधन','रणनीतिक योजना और KPI मापन','प्रतिनिधित्व और संस्थागत संबंध'] }
+    ],
+    skillsHeading: 'कौशल',
     skills: [
       { name: 'रणनीतिक नेतृत्व और निर्णय लेना', pct: 97 },
       { name: 'गुणवत्ता प्रबंधन', pct: 96 },
-      { name: 'योजना और संस्थागत प्रदर्शन', pct: 98 },
+      { name: 'योजना और प्रदर्शन मापन', pct: 98 },
       { name: 'टीम विकास और प्रबंधन', pct: 95 },
-      { name: 'परिवर्तन और संस्थागत परिवर्तन प्रबंधन', pct: 98 },
-      { name: 'साझेदारी निर्माण', pct: 96 },
+      { name: 'परिवर्तन प्रबंधन', pct: 98 },
+      { name: 'साझेदारी और आधिकारिक संबंध', pct: 96 },
       { name: 'शैक्षिक स्थिति विश्लेषण', pct: 97 },
-      { name: 'सर्वोत्तम प्रथाओं का कार्यान्वयन', pct: 95 }
+      { name: 'सर्वोत्तम प्रथाएं', pct: 95 }
     ],
-    contact: 'संपर्क करें',
-    tableHeaders: ['क्र.','प्रशिक्षण कार्यक्रम','आयोजक संस्था','तिथि','अवधि'],
-    footer: '© 2024 माजिद अली सईद अबू रास - सर्वाधिकार सुरक्षित'
+    trainingHeading: 'प्रशिक्षण कार्यक्रम',
+    trainingCols: ['#', 'कार्यक्रम का नाम', 'आयोजक', 'तारीख', 'अवधि/घंटे'],
+    navItems: [
+      { id: 'hero', label: 'होम' },
+      { id: 'objective', label: 'उद्देश्य' },
+      { id: 'certifications', label: 'प्रमाणपत्र' },
+      { id: 'education', label: 'शिक्षा' },
+      { id: 'experience', label: 'अनुभव' },
+      { id: 'skills', label: 'कौशल' },
+      { id: 'training', label: 'प्रशिक्षण' }
+    ]
+  },
+  ur: {
+    dir: 'rtl', lang: 'ur',
+    navTitle: 'مینو', langLabel: 'زبان',
+    headerName: 'ماجد ابوراس',
+    heroName: 'ماجد علی سعید ابوراس',
+    heroTitle: 'تعلیمی قیادت اور اسٹریٹجک پلاننگ میں ماہر',
+    heroLoc: 'ریاض - المحمدیہ',
+    heroCountry: 'سعودی عرب',
+    heroExp: '18+ سال کا تجربہ', heroDeg: 'تعلیم میں ماسٹرز',
+    objHeading: 'کیریئر مقصد',
+    objText: 'میں اپنے انتظامی اور تعلیمی تجربے کو اسٹریٹجک فیصلہ سازی کی حمایت اور ویژن 2030 کے اہداف کے مطابق اسٹریٹجک پلاننگ اور عملی نفاذ کے درمیان ادارہ جاتی انضمام حاصل کرنے کے لیے استعمال کرنا چاہتا ہوں۔',
+    certHeading: 'پیشہ ورانہ سرٹیفکیٹ',
+    certs: [
+      { name: 'کوالٹی، تشخیص اور ایکریڈیٹیشن پروگرام', org: 'تعلیمی تشخیص کمیشن' },
+      { name: 'ISO 9001 اندرونی آڈیٹر', org: 'تکنیکی تربیت کارپوریشن' },
+      { name: 'اسٹریٹجک پلاننگ', org: 'عوامی انتظامیہ انسٹی ٹیوٹ' },
+      { name: 'انسانی وسائل کی انتظامیہ', org: 'عوامی انتظامیہ انسٹی ٹیوٹ' },
+      { name: 'تبدیلی کی انتظامیہ', org: 'عوامی انتظامیہ انسٹی ٹیوٹ' }
+    ],
+    eduHeading: 'تعلیمی اہلیت',
+    edu: [
+      { degree: 'تعلیم میں ماسٹرز (2017)', uni: 'لیوئس یونیورسٹی - شکاگو، امریکا', note: 'شاہ عبداللہ اسکالرشپ پروگرام', topics: ['تعلیمی پالیسیاں','نصاب کی ترقی','نصاب کا تجزیہ','تشخیص کے معیارات','تعلیمی تنظیم کا انتظام','قیادت'] },
+      { degree: 'انگریزی تدریس میں بیچلرز (2007)', uni: 'کنگ سعود یونیورسٹی - ریاض', note: '', topics: ['دوسری زبان کے طور پر انگریزی','تعلیمی تیاری','تعلیمی قیادت','تعلیمی پالیسیاں'] }
+    ],
+    expHeading: 'کام کا تجربہ',
+    exp: [
+      { title: 'انگریزی استاد (2013 - حال)', org: 'وزارت تعلیم', tasks: ['انگریزی تدریس اور پروگرام ترقی','اثر کی پیمائش اور درس منصوبے','نصاب کی ترقی میں حصہ','تعلیمی رپورٹس کی تیاری'] },
+      { title: 'جنرل مینیجر (2003-2013) — 10 سال', org: 'قومی مشاورتی کمپنی', tasks: ['انتظامی اور تکنیکی مشاورت','آپریشنز کی نگرانی اور بجٹ','اسٹریٹجک پلاننگ اور KPI','نمائندگی اور ادارہ جاتی تعلقات'] }
+    ],
+    skillsHeading: 'مہارتیں',
+    skills: [
+      { name: 'اسٹریٹجک قیادت اور فیصلہ سازی', pct: 97 },
+      { name: 'کوالٹی مینجمنٹ', pct: 96 },
+      { name: 'منصوبہ بندی اور کارکردگی', pct: 98 },
+      { name: 'ٹیم ڈویلپمنٹ', pct: 95 },
+      { name: 'تبدیلی کا انتظام', pct: 98 },
+      { name: 'شراکت داری اور تعلقات', pct: 96 },
+      { name: 'تعلیمی صورتحال کا تجزیہ', pct: 97 },
+      { name: 'بہترین طریقے', pct: 95 }
+    ],
+    trainingHeading: 'تربیتی پروگرام',
+    trainingCols: ['#', 'پروگرام کا نام', 'منتظم', 'تاریخ', 'دورانیہ/گھنٹے'],
+    navItems: [
+      { id: 'hero', label: 'ہوم' },
+      { id: 'objective', label: 'مقصد' },
+      { id: 'certifications', label: 'سرٹیفکیٹ' },
+      { id: 'education', label: 'تعلیم' },
+      { id: 'experience', label: 'تجربہ' },
+      { id: 'skills', label: 'مہارتیں' },
+      { id: 'training', label: 'تربیت' }
+    ]
   }
 };
 
-// Training data (same for all languages, translated headers only)
-const trainingData = [
-  ['1','مهارتي تدريس القراءة والكتابة للإنجليزية / Reading & Writing Skills','إدارة التدريب بالرياض / Riyadh Training Dept.','2008/11/30','12h'],
-  ['2','الإبداع والتفكير الإبداعي / Creativity & Creative Thinking','إدارة التدريب بالرياض','2009/03/07','12h'],
-  ['3','الإيجابية في البيئة المدرسية / Positivity in School','إدارة التدريب بالرياض','2009/03/14','12h'],
-  ['4','أساسيات في التفكير / Thinking Fundamentals','إدارة التدريب بالرياض','2009/07/11','12h'],
-  ['5','مهارات السلوك الإداري / Administrative Behavior','إدارة التدريب بالرياض','2009/07/17','12h'],
-  ['6','قياس كفاءة التدريس / Teaching Efficiency','إدارة التدريب بالرياض','2009/11/07','8h'],
-  ['7','مهارات إعداد التقارير / Report Writing','إدارة التدريب بالرياض','2010/02/06','12h'],
-  ['8','الحوار الفعال / Effective Dialogue','إدارة التدريب بالرياض','2010/03/05','12h'],
-  ['9','قيادة عمليات التدريب / Training Leadership','إدارة التدريب بالرياض','2010/06/18','12h'],
-  ['10','إدارة العمليات العقلية / Mental Process Management','إدارة التدريب بالرياض','2011/02/01','12h'],
-  ['11','استراتيجيات تعليم قواعد الإنجليزية / English Grammar Strategies','إدارة التدريب بالرياض','2011/04/22','12h'],
-  ['12','مهارات النجاح القيادي / Leadership Success','إدارة التدريب بالرياض','2011/10/14','12h'],
-  ['13','التخطيط الاستراتيجي / Strategic Planning','إدارة التدريب بالرياض','2011/11/26','12h'],
-  ['14','فن اكتساب لغة جديدة / Language Acquisition','إدارة التدريب بالرياض','2012/02/26','12h'],
-  ['15','تقنية مواجهة الضغوط / Stress Management','إدارة التدريب بالرياض','2012/05/05','12h'],
-  ['16','قيادة عمليات التدريب (أنماط) / Training Patterns','إدارة التدريب بالرياض','2012/05/19','12h'],
-  ['17','تريز لحل المشكلات / TRIZ Problem Solving','إدارة التدريب بالرياض','2012/11/15','12h'],
-  ['18','إدارة التغيير / Change Management','إدارة التدريب بالرياض','2012/12/15','12h'],
-  ['19','التصميم الرقمي للمقررات / Digital Course Design','إدارة التدريب بالرياض','2013/05/11','12h'],
-  ['20','الإبداع الناقد في الإنجليزية / Critical Creativity in English','إدارة التدريب بالرياض','2017/12/17','10h'],
-  ['21','مفاهيم في القيادة التربوية / Educational Leadership Concepts','المركز الوطني للتطوير','2019/07/21','12h'],
-  ['22','الإشراف التربوي / Educational Supervision','المركز الوطني للتطوير','2019/07/28','12h'],
-  ['23','ورشة توثيق الأعمال بالجوال / Mobile Documentation','إدارة التدريب بالرياض','2019/09/17','4h'],
-  ['24','إثارة الدافعية عن بعد / Remote Motivation','إدارة التدريب بالرياض','2020/04/06','4h'],
-  ['25','لائحة الوظائف التعليمية / Educational Jobs Regulation','معهد جدة الإقليمي','2020/06/13','15h'],
-  ['26','التدريب على برنامج (مايكروسوفت تيمز) / Microsoft Teams','إدارة التدريب بالرياض','2020/09/14','3h'],
-  ['27','حل المشكلات واتخاذ القرارات الفعالة / Problem Solving & Decision Making','إدارة التدريب بالرياض','2021/04/04','6h'],
-  ['28','مهارات الإشراف التربوي / Educational Supervision Skills','إدارة التدريب بالرياض','2021/04/06','6h'],
-  ['29','معايير وتطبيقات اختبارات الرخصة المهنية / Professional License Tests','إدارة التدريب بالرياض','2021/04/13','6h'],
-  ['30','البيئة الصفية / Classroom Environment','إدارة التدريب بالرياض','2021/04/18','6h'],
-  ['31','إدارة السياحة / Tourism Management','معهد الإدارة (إثرائي)','2021/04/21','0.6h'],
-  ['32','التواصل الذكي / Smart Communication','إدارة التدريب بالرياض','2021/04/27','6h'],
-  ['33','الذكاء الاجتماعي في التعليم / Social Intelligence in Education','إدارة التدريب بالرياض','2021/05/02','6h'],
-  ['34','التخطيط التشغيلي / Operational Planning','إدارة التدريب بالرياض','2021/05/04','6h'],
-  ['35','إدارة التغيير / Change Management','معهد الإدارة (إثرائي)','2021/05/05','1.8h'],
-  ['36','مهارات اتخاذ القرار الإداري / Administrative Decision Making','إدارة التدريب بالرياض','2021/05/23','6h'],
-  ['37','أسرار الأنماط التفكيرية / Thinking Patterns Secrets','إدارة التدريب بالرياض','2021/05/25','6h'],
-  ['38','تحويل الأفكار إلى مشاريع / Ideas to Projects','إدارة التدريب بالرياض','2021/05/30','6h'],
-  ['39','تقنيات إبداعية في اتخاذ القرار / Creative Decision Techniques','إدارة التدريب بالرياض','2021/06/01','6h'],
-  ['40','التعامل مع فرط الحركة وتشتت الانتباه / ADHD Management','إدارة التدريب بالرياض','2021/06/06','6h'],
-  ['41','فن محادثة الجمهور / Public Speaking Art','إدارة التدريب بالرياض','2021/06/08','6h'],
-  ['42','الابتكار الحكومي / Government Innovation','معهد الإدارة (إثرائي)','2021/06/15','3h'],
-  ['43','منازعات التأديب / Disciplinary Disputes','معهد الإدارة (إثرائي)','2021/07/27','2.5h'],
-  ['44','الإبداع الإداري / Administrative Creativity','معهد الإدارة (إثرائي)','2021/07/30','2.2h'],
-  ['45','التقويم من أجل التعلم / Assessment for Learning','إدارة التدريب بالرياض','2021/08/15','8h'],
-  ['46','التدريب على إرشاد ودعم أسر الأطفال ذوي الإعاقة / Supporting Special Needs Families','إدارة التدريب بالرياض','2021/08/22','8h'],
-  ['47','طرق التفكير الناقد / Critical Thinking Methods','إدارة التدريب بالرياض','2021/08/24','8h'],
-  ['48','فن إدارة الوقت / Time Management Art','إدارة التدريب بالرياض','2021/09/26','8h'],
-  ['49','الإبداع الجاد فن ومهارات / Serious Creativity','إدارة التدريب بالرياض','2021/09/28','8h'],
-  ['50','التوازن بين العمل والحياة / Work-Life Balance','إدارة التدريب بالرياض','2021/10/26','8h'],
-  ['51','المهارات النفسية للتعامل مع الخجل / Shyness Management Skills','إدارة التدريب بالرياض','2021/10/31','8h'],
-  ['52','أساسيات الجودة والتقويم والاعتماد / Quality Basics & Accreditation','هيئة تقويم التعليم والتدريب','2023/11/04','25h'],
-  ['53','المدقق الرئيسي لإدارة الجودة أيزو 9001 / ISO 9001 Lead Auditor','مركز مقياس التعلم','2023/11/12','15h'],
-  ['54','مؤشرات قياس الأداء وبطاقة الأداء المتوازن / Performance Indicators & Balanced Scorecard','مركز محبرة للتدريب','2024/02/26','15h'],
-  ['55','الذكاء العاطفي في بيئة العمل / Emotional Intelligence at Work','إدارة التدريب بالرياض','2026/04/26','6h'],
-  ['56','التفكير الإبداعي والابتكار / Creative Thinking & Innovation','إدارة التدريب بالرياض','2026/05/10','6h'],
-  ['57','مهارات القيادة الفعالة / Effective Leadership Skills','إدارة التدريب بالرياض','2026/05/13','6h'],
-  ['58','إدارة المشاريع الاحترافية (مقدمة) / Professional Project Management','إدارة التدريب بالرياض','2026/05/17','6h'],
-  ['59','التميز في خدمة العملاء / Customer Service Excellence','إدارة التدريب بالرياض','2026/05/20','6h']
+const languages = [
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'ur', name: 'اردو', flag: '🇵🇰' }
 ];
 
-const langFlags = { ar:'🇸🇦', en:'🇬🇧', fr:'🇫🇷', es:'🇪🇸', de:'🇩🇪', zh:'🇨🇳', ja:'🇯🇵', ko:'🇰🇷', tr:'🇹🇷', hi:'🇮🇳' };
+const trainingData = [
+  ['مهارتي تدريس القراءة والكتابة للإنجليزية','إدارة التدريب بالرياض','2008/11/30','12 ساعة'],
+  ['الإبداع والتفكير الإبداعي','إدارة التدريب بالرياض','2009/03/07','12 ساعة'],
+  ['الإيجابية في البيئة المدرسية','إدارة التدريب بالرياض','2009/03/14','12 ساعة'],
+  ['أساسيات في التفكير','إدارة التدريب بالرياض','2009/07/11','12 ساعة'],
+  ['مهارات السلوك الإداري','إدارة التدريب بالرياض','2009/07/17','12 ساعة'],
+  ['قياس كفاءة التدريس','إدارة التدريب بالرياض','2009/11/07','8 ساعات'],
+  ['مهارات إعداد التقارير','إدارة التدريب بالرياض','2010/02/06','12 ساعة'],
+  ['الحوار الفعال','إدارة التدريب بالرياض','2010/03/05','12 ساعة'],
+  ['قيادة عمليات التدريب (أسس ومهارات)','إدارة التدريب بالرياض','2010/06/18','12 ساعة'],
+  ['إدارة العمليات العقلية لتعليم ممتع','إدارة التدريب بالرياض','2011/02/01','12 ساعة'],
+  ['استراتيجيات تعليم قواعد اللغة الإنجليزية','إدارة التدريب بالرياض','2011/04/22','12 ساعة'],
+  ['مهارات النجاح القيادي','إدارة التدريب بالرياض','2011/10/14','12 ساعة'],
+  ['التخطيط الاستراتيجي','إدارة التدريب بالرياض','2011/11/26','12 ساعة'],
+  ['فن اكتساب لغة جديدة','إدارة التدريب بالرياض','2012/02/26','12 ساعة'],
+  ['تقنية مواجهة الضغوط','إدارة التدريب بالرياض','2012/05/05','12 ساعة'],
+  ['قيادة عمليات التدريب (أنماط وأساليب)','إدارة التدريب بالرياض','2012/05/19','12 ساعة'],
+  ['تريز لحل المشكلات بطرق إبداعية','إدارة التدريب بالرياض','2012/11/15','12 ساعة'],
+  ['إدارة التغيير','إدارة التدريب بالرياض','2012/12/15','12 ساعة'],
+  ['التصميم الرقمي للمقررات المدرسية','إدارة التدريب بالرياض','2013/05/11','12 ساعة'],
+  ['الإبداع الناقد في تدريس اللغة الإنجليزية','إدارة التدريب بالرياض','2017/12/17','10 ساعات'],
+  ['مفاهيم ونظريات في القيادة التربوية','المركز الوطني للتطوير','2019/07/21','12 ساعة'],
+  ['الإشراف التربوي - الدعم الشخصي والتوجيه','المركز الوطني للتطوير','2019/07/28','12 ساعة'],
+  ['ورشة عمل استخدام الجوال في توثيق الأعمال','إدارة التدريب بالرياض','2019/09/17','4 ساعات'],
+  ['إثارة الدافعية لدراسة اللغة الإنجليزية عن بعد','إدارة التدريب بالرياض','2020/04/06','4 ساعات'],
+  ['لائحة الوظائف التعليمية','معهد جدة الإقليمي','2020/06/13','15 ساعة'],
+  ['التدريب على برنامج (مايكروسوفت تيمز)','إدارة التدريب بالرياض','2020/09/14','3 ساعات'],
+  ['حل المشكلات واتخاذ القرارات الفعالة','إدارة التدريب بالرياض','2021/04/04','6 ساعات'],
+  ['مهارات الإشراف التربوي','إدارة التدريب بالرياض','2021/04/06','6 ساعات'],
+  ['معايير وتطبيقات اختبارات الرخصة المهنية','إدارة التدريب بالرياض','2021/04/13','6 ساعات'],
+  ['البيئة الصفية','إدارة التدريب بالرياض','2021/04/18','6 ساعات'],
+  ['إدارة السياحة','معهد الإدارة (إثرائي)','2021/04/21','0.6 ساعة'],
+  ['التواصل الذكي','إدارة التدريب بالرياض','2021/04/27','6 ساعات'],
+  ['الذكاء الاجتماعي في التعليم','إدارة التدريب بالرياض','2021/05/02','6 ساعات'],
+  ['التخطيط التشغيلي','إدارة التدريب بالرياض','2021/05/04','6 ساعات'],
+  ['إدارة التغيير','معهد الإدارة (إثرائي)','2021/05/05','1.8 ساعة'],
+  ['مهارات اتخاذ القرار الإداري','إدارة التدريب بالرياض','2021/05/23','6 ساعات'],
+  ['أسرار الأنماط التفكيرية','إدارة التدريب بالرياض','2021/05/25','6 ساعات'],
+  ['تحويل الأفكار إلى مشاريع','إدارة التدريب بالرياض','2021/05/30','6 ساعات'],
+  ['تقنيات إبداعية في اتخاذ القرار','إدارة التدريب بالرياض','2021/06/01','6 ساعات'],
+  ['التعامل مع فرط الحركة وتشتت الانتباه','إدارة التدريب بالرياض','2021/06/06','6 ساعات'],
+  ['فن محادثة الجمهور','إدارة التدريب بالرياض','2021/06/08','6 ساعات'],
+  ['الابتكار الحكومي','معهد الإدارة (إثرائي)','2021/06/15','3 ساعات'],
+  ['منازعات التأديب','معهد الإدارة (إثرائي)','2021/07/27','2.5 ساعة'],
+  ['الإبداع الإداري','معهد الإدارة (إثرائي)','2021/07/30','2.2 ساعة'],
+  ['التقويم من أجل التعلم','إدارة التدريب بالرياض','2021/08/15','8 ساعات'],
+  ['التدريب على إرشاد ودعم أسر الأطفال ذوي الإعاقة','إدارة التدريب بالرياض','2021/08/22','8 ساعات'],
+  ['طرق التفكير الناقد','إدارة التدريب بالرياض','2021/08/24','8 ساعات'],
+  ['فن إدارة الوقت','إدارة التدريب بالرياض','2021/09/26','8 ساعات'],
+  ['الإبداع الجاد فن ومهارات','إدارة التدريب بالرياض','2021/09/28','8 ساعات'],
+  ['التوازن بين العمل والحياة','إدارة التدريب بالرياض','2021/10/26','8 ساعات'],
+  ['المهارات النفسية للتعامل مع الخجل','إدارة التدريب بالرياض','2021/10/31','8 ساعات'],
+  ['أساسيات الجودة والتقويم والاعتماد','هيئة تقويم التعليم والتدريب','2023/11/04','25 ساعة'],
+  ['المدقق الرئيسي لإدارة الجودة أيزو 9001','مركز مقياس التعلم','2023/11/12','15 ساعة'],
+  ['مؤشرات قياس الأداء وبطاقة الأداء المتوازن','مركز محبرة للتدريب','2024/02/26','15 ساعة'],
+  ['الذكاء العاطفي في بيئة العمل','إدارة التدريب بالرياض','2026/04/26','6 ساعات'],
+  ['التفكير الإبداعي والابتكار','إدارة التدريب بالرياض','2026/05/10','6 ساعات'],
+  ['مهارات القيادة الفعالة','إدارة التدريب بالرياض','2026/05/13','6 ساعات'],
+  ['إدارة المشاريع الاحترافية (مقدمة)','إدارة التدريب بالرياض','2026/05/17','6 ساعات'],
+  ['التميز في خدمة العملاء','إدارة التدريب بالرياض','2026/05/20','6 ساعات']
+];
+
 let currentLang = 'ar';
 
-function switchLang(lang) {
-  currentLang = lang;
-  const t = translations[lang];
+function openNav() {
+  document.getElementById('navOverlay').classList.remove('invisible','opacity-0');
+  const panel = document.getElementById('navPanel');
+  panel.classList.remove('translate-x-full','rtl:-translate-x-full');
+  panel.style.transform = 'translateX(0)';
+}
+function closeNav() {
+  document.getElementById('navOverlay').classList.add('invisible','opacity-0');
+  const panel = document.getElementById('navPanel');
+  if (currentLang === 'ar' || currentLang === 'ur') {
+    panel.style.transform = 'translateX(-100%)';
+  } else {
+    panel.style.transform = 'translateX(100%)';
+  }
+}
+
+function switchLang(code) {
+  currentLang = code;
+  const t = translations[code];
   const html = document.documentElement;
   html.setAttribute('dir', t.dir);
   html.setAttribute('lang', t.lang);
-  document.body.style.fontFamily = t.fontFamily;
 
-  document.getElementById('headerName').textContent = t.name;
-  document.getElementById('footerText').textContent = t.footer;
-  document.getElementById('navTitle').textContent = t.nav;
+  // Update nav panel position
+  const panel = document.getElementById('navPanel');
+  if (t.dir === 'rtl') {
+    panel.style.right = '0'; panel.style.left = 'auto';
+  } else {
+    panel.style.left = '0'; panel.style.right = 'auto';
+  }
 
-  // Lang buttons
-  const selector = document.getElementById('langSelector');
-  selector.innerHTML = '';
-  Object.keys(langFlags).forEach(l => {
-    const btn = document.createElement('button');
-    btn.className = `lang-btn px-2 py-1 rounded text-sm ${l === lang ? 'active' : ''}`;
-    btn.style.background = l === lang ? '#2d6a5e' : 'rgba(45,106,94,0.08)';
-    btn.style.color = l === lang ? '#fff' : '#2d6a5e';
-    btn.textContent = langFlags[l];
-    btn.title = l.toUpperCase();
-    btn.onclick = () => switchLang(l);
-    selector.appendChild(btn);
-  });
+  // Simple text updates
+  document.getElementById('navTitle').textContent = t.navTitle;
+  document.getElementById('langLabel').textContent = t.langLabel;
+  document.getElementById('headerName').textContent = t.headerName;
+  document.getElementById('heroName').textContent = t.heroName;
+  document.getElementById('heroTitle').textContent = t.heroTitle;
+  document.getElementById('heroLoc').textContent = t.heroLoc;
+  document.getElementById('heroCountry').textContent = t.heroCountry;
+  document.getElementById('heroExp').textContent = t.heroExp;
+  document.getElementById('heroDeg').textContent = t.heroDeg;
+  document.getElementById('objHeading').textContent = t.objHeading;
+  document.getElementById('objText').textContent = t.objText;
+  document.getElementById('certHeading').textContent = t.certHeading;
+  document.getElementById('eduHeading').textContent = t.eduHeading;
+  document.getElementById('expHeading').textContent = t.expHeading;
+  document.getElementById('skillsHeading').textContent = t.skillsHeading;
+  document.getElementById('trainingHeading').textContent = t.trainingHeading;
 
   // Nav links
   const navLinks = document.getElementById('navLinks');
-  navLinks.innerHTML = '';
-  t.sections.forEach((s, i) => {
-    const a = document.createElement('a');
-    a.href = '#section-' + i;
-    a.className = 'block px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm font-medium';
-    a.style.color = '#2d6a5e';
-    a.textContent = s;
-    a.onclick = () => closeNavMenu();
-    navLinks.appendChild(a);
-  });
+  navLinks.innerHTML = t.navItems.map(item => `<a href="#${item.id}" onclick="closeNav()" class="block py-3 px-4 rounded-lg hover:bg-primary/10 text-gray-700 hover:text-primary transition font-medium">${item.label}</a>`).join('');
 
-  // Nav panel position
-  const navPanel = document.getElementById('navPanel');
-  navPanel.style.right = t.dir === 'rtl' ? '0' : 'auto';
-  navPanel.style.left = t.dir === 'rtl' ? 'auto' : '0';
-  navPanel.style.transform = t.dir === 'rtl' ? 'translateX(100%)' : 'translateX(-100%)';
+  // Lang buttons
+  const langBtns = document.getElementById('langButtons');
+  langBtns.innerHTML = languages.map(l => `<button onclick="switchLang('${l.code}')" class="lang-btn px-2 py-2 rounded-lg text-xs font-medium border ${l.code === code ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200 hover:border-primary'}">${l.flag} ${l.name}</button>`).join('');
 
-  renderContent(t);
-}
+  // Certs
+  document.getElementById('certGrid').innerHTML = t.certs.map(c => `<div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-primary"><h3 class="font-bold text-dark text-sm">${c.name}</h3><p class="text-gray-500 text-xs mt-1">${c.org}</p></div>`).join('');
 
-function renderContent(t) {
-  const main = document.getElementById('mainContent');
-  main.innerHTML = '';
-
-  // Profile Section
-  let html = `<section id="section-0" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12);">
-    <div class="text-center mb-4">
-      <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl font-bold mb-3" style="background:linear-gradient(135deg,#2d6a5e,#63a29b);color:#fff;">م</div>
-      <h2 class="text-2xl font-bold" style="color:#2d6a5e;">${t.name}</h2>
-      <p class="text-sm mt-1" style="color:#7a9e98;">${t.title}</p>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-center text-xs">
-      <div class="p-2 rounded-lg" style="background:rgba(99,162,155,0.06);">📍 ${t.profile.location}</div>
-      <div class="p-2 rounded-lg" style="background:rgba(99,162,155,0.06);">📧 ${t.profile.email}</div>
-      <div class="p-2 rounded-lg" style="background:rgba(99,162,155,0.06);">📞 ${t.profile.phone}</div>
-      <div class="p-2 rounded-lg" style="background:rgba(99,162,155,0.06);">🇸🇦 ${t.profile.country}</div>
-      <div class="p-2 rounded-lg" style="background:rgba(99,162,155,0.06);">🟢 ${t.profile.experience}</div>
-      <div class="p-2 rounded-lg" style="background:rgba(99,162,155,0.06);">🎓 ${t.profile.education}</div>
-    </div>
-  </section>`;
-
-  // Objective
-  html += `<section id="section-1" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.1s;">
-    <h3 class="text-lg font-bold mb-3" style="color:#2d6a5e;"><i data-lucide="target" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[1]}</h3>
-    <p class="text-sm leading-relaxed" style="color:#4a6e68;">${t.objective}</p>
-  </section>`;
-
-  // Degrees
-  html += `<section id="section-2" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.2s;">
-    <h3 class="text-lg font-bold mb-4" style="color:#2d6a5e;"><i data-lucide="graduation-cap" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[2]}</h3>
-    ${t.degrees.map(d => `<div class="mb-4 p-4 rounded-xl" style="background:rgba(99,162,155,0.04); border:1px solid rgba(99,162,155,0.08);">
-      <h4 class="font-bold text-sm" style="color:#2d6a5e;">${d.title}</h4>
-      <p class="text-xs mt-1" style="color:#7a9e98;">${d.institution}</p>
-      ${d.note ? `<p class="text-xs mt-1" style="color:#63a29b;">${d.note}</p>` : ''}
-      <div class="flex flex-wrap gap-1 mt-2">${d.topics.map(tp => `<span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(45,106,94,0.08);color:#2d6a5e;">${tp}</span>`).join('')}</div>
-    </div>`).join('')}
-  </section>`;
-
-  // Certifications
-  html += `<section id="section-3" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.3s;">
-    <h3 class="text-lg font-bold mb-4" style="color:#2d6a5e;"><i data-lucide="award" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[3]}</h3>
-    <div class="grid gap-2">${t.certifications.map(c => `<div class="flex items-start gap-2 p-3 rounded-lg" style="background:rgba(99,162,155,0.04);">
-      <span style="color:#63a29b;">✓</span>
-      <div><p class="text-sm font-medium" style="color:#2d6a5e;">${c.name}</p><p class="text-xs" style="color:#7a9e98;">${c.org}</p></div>
-    </div>`).join('')}</div>
-  </section>`;
+  // Education
+  document.getElementById('eduContent').innerHTML = t.edu.map(e => `<div class="card-hover bg-white p-6 rounded-lg shadow-md border-l-4 border-primary hover:shadow-lg"><div class="flex items-start justify-between mb-2"><div><h3 class="font-bold text-lg text-dark">${e.degree}</h3><p class="text-primary font-medium text-sm mt-1">${e.uni}</p></div></div>${e.note ? `<p class="text-accent text-xs italic mt-3 pb-3 border-b border-accent/20">${e.note}</p>` : ''}<div class="flex flex-wrap gap-2 mt-4">${e.topics.map(tp => `<span class="bg-primary/8 text-primary text-xs px-3 py-1.5 rounded-md font-medium">${tp}</span>`).join('')}</div></div>`).join('');
 
   // Experience
-  html += `<section id="section-4" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.4s;">
-    <h3 class="text-lg font-bold mb-4" style="color:#2d6a5e;"><i data-lucide="briefcase" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[4]}</h3>
-    ${t.experience.map(e => `<div class="mb-4 p-4 rounded-xl" style="background:rgba(99,162,155,0.04); border:1px solid rgba(99,162,155,0.08);">
-      <h4 class="font-bold text-sm" style="color:#2d6a5e;">${e.title}</h4>
-      <p class="text-xs mb-2" style="color:#63a29b;">${e.org}</p>
-      <ul class="space-y-1">${e.tasks.map(task => `<li class="text-xs flex items-start gap-1" style="color:#4a6e68;"><span style="color:#63a29b;">•</span>${task}</li>`).join('')}</ul>
-    </div>`).join('')}
-  </section>`;
-
-  // Training Table
-  html += `<section id="section-5" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.5s;">
-    <h3 class="text-lg font-bold mb-4" style="color:#2d6a5e;"><i data-lucide="book-open" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[5]}</h3>
-    <div class="overflow-x-auto rounded-xl" style="border:1px solid rgba(99,162,155,0.1);">
-      <table class="w-full text-xs">
-        <thead><tr style="background:rgba(45,106,94,0.08);">
-          ${t.tableHeaders.map(h => `<th class="px-3 py-2 text-start font-semibold" style="color:#2d6a5e;">${h}</th>`).join('')}
-        </tr></thead>
-        <tbody>${trainingData.map(row => `<tr class="table-row">
-          ${row.map(cell => `<td class="px-3 py-2" style="color:#4a6e68; border-top:1px solid rgba(99,162,155,0.06);">${cell}</td>`).join('')}
-        </tr>`).join('')}</tbody>
-      </table>
-    </div>
-  </section>`;
+  document.getElementById('expContent').innerHTML = t.exp.map(e => `<div class="card-hover bg-white p-6 rounded-lg shadow-md border-l-4 border-accent hover:shadow-lg"><h3 class="font-bold text-lg text-dark">${e.title}</h3><p class="text-primary font-medium text-sm mt-2">${e.org}</p><ul class="mt-4 space-y-2.5">${e.tasks.map(task => `<li class="flex items-start gap-3 text-gray-700 text-sm"><span class="text-accent font-bold text-lg leading-none mt-0.5">›</span><span>${task}</span></li>`).join('')}</ul></div>`).join('');
 
   // Skills
-  html += `<section id="section-6" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.6s;">
-    <h3 class="text-lg font-bold mb-4" style="color:#2d6a5e;"><i data-lucide="bar-chart-2" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[6]}</h3>
-    <div class="space-y-3">${t.skills.map(s => `<div>
-      <div class="flex justify-between text-xs mb-1"><span style="color:#4a6e68;">${s.name}</span><span style="color:#2d6a5e;font-weight:600;">${s.pct}%</span></div>
-      <div class="h-2 rounded-full" style="background:rgba(99,162,155,0.12);"><div class="skill-bar h-2 rounded-full" style="width:${s.pct}%;background:linear-gradient(90deg,#2d6a5e,#63a29b);"></div></div>
-    </div>`).join('')}</div>
-  </section>`;
+  document.getElementById('skillsContent').innerHTML = t.skills.map(s => `<div class="bg-white p-4 rounded-lg shadow-sm"><div class="flex justify-between items-center mb-2"><span class="text-sm font-semibold text-dark">${s.name}</span><span class="text-xs font-bold text-white bg-primary px-2.5 py-1 rounded-full">${s.pct}%</span></div><div class="w-full bg-gray-200 rounded-full h-3"><div class="skill-bar bg-gradient-to-r from-primary via-primary to-accent h-3 rounded-full shadow-md" style="width:${s.pct}%"></div></div></div>`).join('');
 
-  // Contact
-  html += `<section id="section-7" class="section-card fade-in rounded-2xl p-6 mb-6" style="background:#fff; border:1px solid rgba(99,162,155,0.12); animation-delay:0.7s;">
-    <h3 class="text-lg font-bold mb-4" style="color:#2d6a5e;"><i data-lucide="mail" style="display:inline;width:18px;height:18px;vertical-align:middle;margin-inline-end:6px;"></i>${t.sections[7]}</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
-      <a href="mailto:masa760u@gmail.com" class="block p-3 rounded-xl transition hover:shadow-md" style="background:rgba(99,162,155,0.06);color:#2d6a5e;text-decoration:none;">
-        <div class="text-xl mb-1">📧</div><div class="text-xs">masa760u@gmail.com</div>
-      </a>
-      <a href="tel:0554441449" class="block p-3 rounded-xl transition hover:shadow-md" style="background:rgba(99,162,155,0.06);color:#2d6a5e;text-decoration:none;">
-        <div class="text-xl mb-1">📞</div><div class="text-xs">0554441449</div>
-      </a>
-      <div class="p-3 rounded-xl" style="background:rgba(99,162,155,0.06);color:#2d6a5e;">
-        <div class="text-xl mb-1">📍</div><div class="text-xs">${t.profile.location}</div>
-      </div>
-    </div>
-  </section>`;
+  // Training table
+  document.getElementById('trainingHeader').innerHTML = t.trainingCols.map(c => `<th class="px-4 py-4 text-${t.dir === 'rtl' ? 'right' : 'left'} font-bold text-white text-xs bg-gradient-to-r from-primary to-accent">${c}</th>`).join('');
+  document.getElementById('trainingBody').innerHTML = trainingData.map((row, i) => `<tr class="border-b border-gray-100 hover:bg-primary/5 transition"><td class="px-4 py-3 text-xs text-gray-500 font-bold">${i+1}</td><td class="px-4 py-3 text-xs font-semibold text-dark">${row[0]}</td><td class="px-4 py-3 text-xs text-gray-700">${row[1]}</td><td class="px-4 py-3 text-xs text-gray-600">${row[2]}</td><td class="px-4 py-3 text-xs text-primary font-bold">${row[3]}</td></tr>`).join('');
 
-  main.innerHTML = html;
-  lucide.createIcons();
+  closeNav();
 }
-
-function openNavMenu() {
-  const overlay = document.getElementById('navOverlay');
-  const panel = document.getElementById('navPanel');
-  overlay.style.visibility = 'visible';
-  overlay.style.opacity = '1';
-  panel.style.transform = 'translateX(0)';
-}
-function closeNavMenu() {
-  const overlay = document.getElementById('navOverlay');
-  const panel = document.getElementById('navPanel');
-  const t = translations[currentLang];
-  overlay.style.visibility = 'hidden';
-  overlay.style.opacity = '0';
-  panel.style.transform = t.dir === 'rtl' ? 'translateX(100%)' : 'translateX(-100%)';
-}
-
-document.getElementById('menuBtn').onclick = openNavMenu;
-document.getElementById('closeNav').onclick = closeNavMenu;
-document.getElementById('navOverlay').onclick = (e) => { if(e.target.id === 'navOverlay') closeNavMenu(); };
 
 // Init
 const defaultConfig = {
   site_title: 'Majed Abu Ras - CV',
-  background_color: '#f8fffe',
-  surface_color: '#ffffff',
-  text_color: '#4a6e68',
-  primary_color: '#2d6a5e',
-  secondary_color: '#63a29b',
+  background_color: '#F7F3EE',
+  surface_color: '#FFFFFF',
+  text_color: '#2C3E50',
+  primary_color: '#63A5AB',
+  accent_color: '#D4A574',
   font_family: 'Tajawal',
   font_size: 14
 };
 
-// Check if SDK is available before initializing
-if (window.elementSdk && typeof window.elementSdk.init === 'function') {
-  window.elementSdk.init({
-    defaultConfig,
-    onConfigChange: async (config) => {
-      document.querySelector('.app-wrapper').style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, #f0f7f5 50%, #faf8f5 100%)`;
-    },
-    mapToCapabilities: (config) => ({
-      recolorables: [
-        { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-        { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
-        { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-        { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
-        { get: () => config.secondary_color || defaultConfig.secondary_color, set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } }
-      ],
-      borderables: [],
-      fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
-      fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
-    }),
-    mapToEditPanelValues: (config) => new Map([
-      ['site_title', config.site_title || defaultConfig.site_title]
-    ])
-  });
-}
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    document.body.style.backgroundColor = config.background_color || defaultConfig.background_color;
+    document.querySelectorAll('.bg-white').forEach(el => el.style.backgroundColor = config.surface_color || defaultConfig.surface_color);
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+      { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ['site_title', config.site_title || defaultConfig.site_title]
+  ])
+});
 
 switchLang('ar');
 lucide.createIcons();
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a013db97dc0fd391',t:'MTc3OTcwNDk1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ab68b910ac357d',t:'MTc4MTI5NDA4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
